@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Welcome from './src/screens/welcome/Welcome';
 import Test from './src/screens/test/Test';
 import Navigation from './src/navigation/Navigation';
+import FrameWelcome from './src/components/frame/FrameWelcome';
 
 export default function App() {
   return (

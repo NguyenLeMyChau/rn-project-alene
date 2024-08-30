@@ -6,6 +6,8 @@ import Page1 from '../../../assets/page1.png';
 import ButtonCheck from '../../components/button/ButtonCheck';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../navigation/Navigation';
+import FrameWelcome from '../../components/frame/FrameWelcome';
+import TextNote from '../../components/text/TextNote';
 
 export default function Welcome() {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -22,7 +24,7 @@ export default function Welcome() {
                         end={{ x: 0, y: 1 }}
                         style={styles.containerHeader}
                     >
-                        <Header />
+                        <Header currentPage={1} />
 
                         <TextTitle text={"TẾT BẬN RỘN \nCƠ-XƯƠNG-KHỚP CÓ KHOẺ \nĐỂ CHU TOÀN?"} height={100} />
 
@@ -49,7 +51,17 @@ export default function Welcome() {
                     end={{ x: 0, y: 1 }}
                     style={styles.containerFooter}
                 >
-                    <Text style={styles.footerText}>Footer Content Here</Text>
+                    <View style={styles.footerContainer}>
+                        <FrameWelcome text={'MIỄN\nPHÍ'} />
+                        <FrameWelcome text={'CHỈ \n5 PHÚT'} />
+                        <FrameWelcome text={'Voucher\n100K'} />
+                    </View>
+
+                    <TextNote text={'Bài kiểm tra Cơ, Xương, Khớp này được phát triển bởi đội ngũ Anlene'} />
+                    <View style={{paddingHorizontal: 40}}>
+                        <TextNote text={'Lưu ý: Bài kiểm tra không dành cho đối tượng đang bị chấn thương hoặc có bệnh lý về cơ, xương, khớp hoặc tiểu đường'} />
+
+                    </View>
                 </LinearGradient>
             </View>
 
@@ -111,6 +123,13 @@ const styles = StyleSheet.create({
     buttonCheck: {
         position: 'absolute',
         bottom: 15,
+    },
 
+    footerContainer: {
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 10,
     }
 });
