@@ -4,8 +4,12 @@ import Header from '../../components/header/Header';
 import TextTitle from '../../components/text/TextTitle';
 import Page1 from '../../../assets/page1.png';
 import ButtonCheck from '../../components/button/ButtonCheck';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../../navigation/Navigation';
 
 export default function Welcome() {
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
     return (
         <View style={styles.container}>
 
@@ -30,7 +34,7 @@ export default function Welcome() {
                 </View>
 
                 <View style={styles.buttonCheck}>
-                    <ButtonCheck text='KIỂM TRA NGAY' fontSize={20} borderColor='#E1D770' />
+                    <ButtonCheck text='KIỂM TRA NGAY' fontSize={20} borderColor='#E1D770' onPress={() => navigation.navigate('Test')} />
                 </View>
 
 
@@ -107,6 +111,6 @@ const styles = StyleSheet.create({
     buttonCheck: {
         position: 'absolute',
         bottom: 15,
-    
+
     }
 });

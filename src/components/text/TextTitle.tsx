@@ -1,6 +1,5 @@
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
 interface TextTitleProps {
@@ -10,6 +9,7 @@ interface TextTitleProps {
 }
 
 export default function TextTitle({ text, fontSize = 22, height = 27 }: TextTitleProps) {
+
     return (
         <MaskedView
             style={[styles.maskedView, { height }]}
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     maskedView: {
         width: '100%',
         flexDirection: 'row',
+        margin: 5
     },
 
     title: {
