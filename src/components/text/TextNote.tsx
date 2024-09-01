@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 9,
         fontWeight: '400',
-        textAlign:'justify',
+        textAlign:'center',
         fontStyle:'italic',
         marginBottom: 10
     },

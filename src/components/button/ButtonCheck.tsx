@@ -6,11 +6,12 @@ interface ButtonCheckProps {
     onPress?: () => void;
     borderColor?: string;
     fontSize?: number;
+    backgroundColor?: string;
 }
 
-export default function ButtonCheck({ text, onPress, borderColor = '#B70002', fontSize = 16 }: ButtonCheckProps) {
+export default function ButtonCheck({ text, onPress, borderColor = '#B70002', fontSize = 16, backgroundColor = '#B70002' }: ButtonCheckProps) {
     return (
-        <TouchableOpacity style={[styles.button, { borderColor }]} onPress={onPress}>
+        <TouchableOpacity style={[styles.button, { borderColor, backgroundColor }]} onPress={onPress}>
             <Text style={[styles.buttonText, { fontSize }]}>{text}</Text>
         </TouchableOpacity>
 
@@ -19,13 +20,13 @@ export default function ButtonCheck({ text, onPress, borderColor = '#B70002', fo
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: '#B70002',
         paddingVertical: 10,
         paddingHorizontal: 30,
         borderRadius: 50,
         borderWidth: 2,
         justifyContent: 'center',
         alignItems: 'center',
+        marginVertical: 10,
     },
     buttonText: {
         color: '#fff',

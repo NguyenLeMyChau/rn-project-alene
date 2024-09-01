@@ -37,7 +37,7 @@ export default function Header({ currentPage }: HeaderProps) {
 
             {currentPage > 1 ? (
                 <TouchableOpacity style={styles.iconButton} >
-                    <Entypo name="home" size={25} color="white" />
+                    <Entypo name="home" size={26} color="white" />
                 </TouchableOpacity>
             ) : <Logo />
             }
@@ -51,7 +51,7 @@ export default function Header({ currentPage }: HeaderProps) {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        height: 75,
+        height: 80,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
