@@ -7,12 +7,15 @@ import TestStep from './src/screens/test/TestStep';
 import TestStep2 from './src/screens/test/TestStep2';
 import TestStep3 from './src/screens/test/TestStep3';
 import TestStep4 from './src/screens/test/TestStep4';
+import { StepProvider } from './src/screens/test/StepProvider';
 
 export default function App() {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <Navigation/>
+      <StepProvider>
+        <Navigation />
+      </StepProvider>
     </View>
   );
 }

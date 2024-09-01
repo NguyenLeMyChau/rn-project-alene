@@ -1,32 +1,53 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import StepContext from './StepProvider';
+
 
 export default function TestStep() {
+    const context = useContext(StepContext);
+
+    if (!context) {
+        throw new Error('StepContext must be used within a StepProvider');
+    }
+
+    const { steps, currentStep } = context;
+
+    const allStepsCompleted = steps.every(step => step !== null);
+
     const size = 25;
     const color = 'white';
-
+    const stepIcons: Array<'numeric-1-circle-outline' | 'numeric-2-circle-outline' | 'numeric-3-circle-outline' | 'numeric-4-circle-outline'> = [
+        'numeric-1-circle-outline',
+        'numeric-2-circle-outline',
+        'numeric-3-circle-outline',
+        'numeric-4-circle-outline'
+    ];
     return (
         <View style={styles.container}>
-            <View style={styles.step}>
-                <MaterialCommunityIcons name="numeric-1-circle-outline" size={size} color={color} />
-                <Text style={styles.label}>Cơ</Text>
-            </View>
-            <View style={styles.line} />
-            <View style={styles.step}>
-                <MaterialCommunityIcons name="numeric-2-circle-outline" size={size} color={color} />
-                <Text style={styles.label}>Xương</Text>
-            </View>
-            <View style={styles.line} />
-            <View style={styles.step}>
-                <MaterialCommunityIcons name="numeric-3-circle-outline" size={size} color={color} />
-                <Text style={styles.label}>Khớp</Text>
-            </View>
-            <View style={styles.line} />
-            <View style={styles.step}>
-                <MaterialCommunityIcons name="numeric-4-circle-outline" size={size} color={color} />
-                <Text style={styles.label}>Đề kháng</Text>
-            </View>
+            {steps.map((step, index) => (
+                <React.Fragment key={index}>
+                    <View style={styles.step}>
+                        {!allStepsCompleted && index === currentStep ? (
+                            <AntDesign name="play" size={size} color="#ECD24A" />
+                        ) : (
+                            step == null ? (
+                                <MaterialCommunityIcons name={stepIcons[index]} size={size} color={color} />
+                            ) : (
+                                <AntDesign
+                                    name={step ? 'checkcircle' : 'closecircle'}
+                                    size={20}
+                                    color={step ? '#73A442' : '#C6463A'}
+                                    style={styles.icon}
+                                />
+                            )
+                        )}
+                        <Text style={styles.label}>{['Cơ', 'Xương', 'Khớp', 'Đề kháng'][index]}</Text>
+                    </View>
+                    {index < steps.length - 1 && <View style={styles.line} />}
+                </React.Fragment>
+            ))}
         </View>
     );
 }
@@ -61,5 +82,8 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: '400',
         lineHeight: 16
+    },
+    icon: {
+        marginTop: 5,
     },
 });

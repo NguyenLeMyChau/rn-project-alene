@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, BackHandler, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Header from '../../components/header/Header';
 import TestStep from './TestStep';
 import TextTitle from '../../components/text/TextTitle';
@@ -8,6 +8,8 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import ButtonCheck from '../../components/button/ButtonCheck';
 import TextNote from '../../components/text/TextNote';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import StepContext from './StepProvider';
 
 type TestFrameProp = {
     title: string,
@@ -22,28 +24,72 @@ type TestFrameProp = {
 export default function TestFrame({ title, img, textImg, textYes, textNo, nextStep, stopTimeout = false }: TestFrameProp) {
     const [selected, setSelected] = useState<number | null>(null);
     const navigation = useNavigation<NavigationProp<any>>();
+    const context = useContext(StepContext);
+
+    if (!context) {
+        throw new Error('StepContext must be used within a StepProvider');
+    }
+
+    const { steps, setSteps, currentStep, setCurrentStep, goBackStep } = context;
 
     const handleYesClick = () => {
         setSelected(1);
-        if (!stopTimeout) {
-            setTimeout(() => {
-                if (nextStep) {
-                    navigation.navigate(nextStep as never);
-                }
-            }, 3000);
-        }
+        updateSteps(true);
     };
 
     const handleNoClick = () => {
         setSelected(0);
+        updateSteps(false);
+    };
+
+    const updateSteps = (value: boolean) => {
         if (!stopTimeout) {
             setTimeout(() => {
+                const updatedSteps = [...steps];
+                updatedSteps[currentStep] = value;
+                setSteps(updatedSteps);
+                setCurrentStep(currentStep + 1);
                 if (nextStep) {
                     navigation.navigate(nextStep as never);
                 }
-            }, 3000);
+
+            }, 1000);
+        } else {
+            const updatedSteps = [...steps];
+            updatedSteps[currentStep] = value;
+            setSteps(updatedSteps);
         }
     };
+
+    const allStepsSelected = steps.every(step => step !== null);
+
+    useEffect(() => {
+        const backAction = () => {
+            if (currentStep > 0) {
+                const updatedSteps = [...steps];
+                updatedSteps[currentStep] = null;
+                setSteps(updatedSteps);
+
+                goBackStep();
+                navigation.goBack();
+                return true;
+            } else {
+                Alert.alert("Hold on!", "Are you sure you want to go back?", [
+                    {
+                        text: "Cancel",
+                        onPress: () => null,
+                        style: "cancel"
+                    },
+                    { text: "YES", onPress: () => navigation.goBack() }
+                ]);
+                return true;
+            }
+        };
+
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+        return () => backHandler.remove();
+    }, [currentStep, goBackStep]);
 
     return (
         <LinearGradient
@@ -99,7 +145,7 @@ export default function TestFrame({ title, img, textImg, textYes, textNo, nextSt
 
             </View>
 
-            <ButtonCheck text='XÁC NHẬN' borderColor='#B8B8B8' backgroundColor='#B8B8B8' />
+            <ButtonCheck text='XÁC NHẬN' borderColor={allStepsSelected ? '#B70002' : '#B8B8B8'} backgroundColor={allStepsSelected ? '#B70002' : '#B8B8B8'} />
 
             <TextNote text={'*Lưu ý: Hãy dừng bài tập ngay nếu cảm thấy không thoải mái.\n Đảm bảo vị trí tập an toàn để không té ngã.'} />
 

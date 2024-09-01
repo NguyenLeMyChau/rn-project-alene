@@ -8,9 +8,20 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../navigation/Navigation';
 import FrameWelcome from '../../components/frame/FrameWelcome';
 import TextNote from '../../components/text/TextNote';
+import { useContext } from 'react';
+import StepContext from '../test/StepProvider';
 
 export default function Welcome() {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+    const context = useContext(StepContext);
+
+    if (!context) {
+        throw new Error("FrameTest must be used within a StepProvider");
+    }
+
+    const { resetSteps } = context;
+
+
 
     return (
         <View style={styles.container}>
@@ -36,7 +47,7 @@ export default function Welcome() {
                 </View>
 
                 <View style={styles.buttonCheck}>
-                    <ButtonCheck text='KIỂM TRA NGAY' fontSize={20} borderColor='#E1D770' onPress={() => navigation.navigate('TestStep1')} />
+                    <ButtonCheck text='KIỂM TRA NGAY' fontSize={20} borderColor='#E1D770' onPress={async () => { resetSteps(), navigation.navigate('TestStep1') }} />
                 </View>
 
 
@@ -58,7 +69,7 @@ export default function Welcome() {
                     </View>
 
                     <TextNote text={'Bài kiểm tra Cơ, Xương, Khớp này được phát triển bởi đội ngũ Anlene'} />
-                    <View style={{paddingHorizontal: 40}}>
+                    <View style={{ paddingHorizontal: 40 }}>
                         <TextNote text={'Lưu ý: Bài kiểm tra không dành cho đối tượng đang bị chấn thương hoặc có bệnh lý về cơ, xương, khớp hoặc tiểu đường'} />
 
                     </View>

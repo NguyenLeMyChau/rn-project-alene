@@ -3,12 +3,14 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
 import Logo from '../logo/Logo';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 type HeaderProps = {
     currentPage: number;
 };
 
 export default function Header({ currentPage }: HeaderProps) {
+    const navigation = useNavigation<NavigationProp<any>>();
     const totalPages = 6;
 
     return (
@@ -36,7 +38,7 @@ export default function Header({ currentPage }: HeaderProps) {
             </View>
 
             {currentPage > 1 ? (
-                <TouchableOpacity style={styles.iconButton} >
+                <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Welcome')}>
                     <Entypo name="home" size={26} color="white" />
                 </TouchableOpacity>
             ) : <Logo />
