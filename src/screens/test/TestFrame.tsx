@@ -145,7 +145,11 @@ export default function TestFrame({ title, img, textImg, textYes, textNo, nextSt
 
             </View>
 
-            <ButtonCheck text='XÁC NHẬN' borderColor={allStepsSelected ? '#B70002' : '#B8B8B8'} backgroundColor={allStepsSelected ? '#B70002' : '#B8B8B8'} />
+            <ButtonCheck
+                text='XÁC NHẬN'
+                borderColor={allStepsSelected ? '#B70002' : '#B8B8B8'}
+                backgroundColor={allStepsSelected ? '#B70002' : '#B8B8B8'}
+                disabled={allStepsSelected ? false : true} />
 
             <TextNote text={'*Lưu ý: Hãy dừng bài tập ngay nếu cảm thấy không thoải mái.\n Đảm bảo vị trí tập an toàn để không té ngã.'} />
 

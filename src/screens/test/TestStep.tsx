@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import StepContext from './StepProvider';
-
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function TestStep() {
     const context = useContext(StepContext);
@@ -30,17 +30,20 @@ export default function TestStep() {
                 <React.Fragment key={index}>
                     <View style={styles.step}>
                         {!allStepsCompleted && index === currentStep ? (
-                            <AntDesign name="play" size={size} color="#ECD24A" />
+                            <View style={styles.viewCurrentIcon}>
+                                <FontAwesome name="circle" size={17} color="#ECD24A" />
+                            </View>
                         ) : (
                             step == null ? (
-                                <MaterialCommunityIcons name={stepIcons[index]} size={size} color={color} />
+                                <MaterialCommunityIcons name={stepIcons[index]} size={30} color={color} />
                             ) : (
-                                <AntDesign
-                                    name={step ? 'checkcircle' : 'closecircle'}
-                                    size={20}
-                                    color={step ? '#73A442' : '#C6463A'}
-                                    style={styles.icon}
-                                />
+                                <View style={styles.viewIcon}>
+                                    <AntDesign
+                                        name={step ? 'checkcircle' : 'closecircle'}
+                                        size={size}
+                                        color={step ? '#73A442' : '#C6463A'}
+                                    />
+                                </View>
                             )
                         )}
                         <Text style={styles.label}>{['Cơ', 'Xương', 'Khớp', 'Đề kháng'][index]}</Text>
@@ -72,8 +75,7 @@ const styles = StyleSheet.create({
         width: 60,
         height: 1.5,
         backgroundColor: 'white',
-        borderStyle: 'dashed',
-        marginHorizontal: -28,
+        marginHorizontal: -27,
         marginTop: -27,
     },
     label: {
@@ -83,7 +85,17 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         lineHeight: 16
     },
-    icon: {
-        marginTop: 5,
+    viewIcon: {
+        backgroundColor: 'white',
+        borderRadius: 50,
+        borderWidth: 1,
+        borderColor: 'white',
+    },
+    viewCurrentIcon: {
+        padding: 5,
+        backgroundColor: 'white',
+        borderRadius: 50,
+        borderWidth: 2,
+        borderColor: '#ECD24A',
     },
 });
