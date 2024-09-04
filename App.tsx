@@ -8,6 +8,7 @@ import TestStep2 from './src/screens/test/TestStep2';
 import TestStep3 from './src/screens/test/TestStep3';
 import TestStep4 from './src/screens/test/TestStep4';
 import { StepProvider } from './src/screens/test/StepProvider';
+import Popup from './src/components/popup/Popup';
 
 export default function App() {
   return (

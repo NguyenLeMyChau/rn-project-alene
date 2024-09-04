@@ -7,16 +7,17 @@ interface ButtonCheckProps {
     borderColor?: string;
     fontSize?: number;
     backgroundColor?: string;
-    disabled: boolean;
+    disabled?: boolean;
+    color?: string;
 }
 
-export default function ButtonCheck({ text, onPress, borderColor = '#B70002', fontSize = 16, backgroundColor = '#B70002', disabled = false }: ButtonCheckProps) {
+export default function ButtonCheck({ text, onPress, borderColor = '#B70002', fontSize = 16, backgroundColor = '#B70002', disabled = false, color = 'white' }: ButtonCheckProps) {
     return (
         <TouchableOpacity
             style={[styles.button, { borderColor, backgroundColor }]}
             onPress={!disabled ? onPress : undefined}
             disabled={disabled}>
-            <Text style={[styles.buttonText, { fontSize }]}>{text}</Text>
+            <Text style={[styles.buttonText, { fontSize, color }]}>{text}</Text>
         </TouchableOpacity>
 
     );
@@ -31,9 +32,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginVertical: 10,
+        marginHorizontal: 10,
     },
     buttonText: {
-        color: '#fff',
         fontWeight: 'bold',
     },
 });

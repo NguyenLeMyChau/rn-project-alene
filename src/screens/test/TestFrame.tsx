@@ -8,12 +8,14 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import ButtonCheck from '../../components/button/ButtonCheck';
 import TextNote from '../../components/text/TextNote';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import StepContext from './StepProvider';
+import { ResizeMode, Video } from 'expo-av';
+import Popup from '../../components/popup/Popup';
 
 type TestFrameProp = {
     title: string,
     img: any,
+    isVideo?: boolean,
     textImg: string,
     textYes: string,
     textNo: string,
@@ -21,10 +23,11 @@ type TestFrameProp = {
     stopTimeout?: boolean
 }
 
-export default function TestFrame({ title, img, textImg, textYes, textNo, nextStep, stopTimeout = false }: TestFrameProp) {
+export default function TestFrame({ title, img, isVideo = true, textImg, textYes, textNo, nextStep, stopTimeout = false }: TestFrameProp) {
     const [selected, setSelected] = useState<number | null>(null);
     const navigation = useNavigation<NavigationProp<any>>();
     const context = useContext(StepContext);
+    const [isOpenPopup, setOpenPopup] = useState(false);
 
     if (!context) {
         throw new Error('StepContext must be used within a StepProvider');
@@ -32,6 +35,7 @@ export default function TestFrame({ title, img, textImg, textYes, textNo, nextSt
 
     const { steps, setSteps, currentStep, setCurrentStep, goBackStep } = context;
 
+    // dùng để chuyển sang bước tiếp theo
     const handleYesClick = () => {
         setSelected(1);
         updateSteps(true);
@@ -42,6 +46,7 @@ export default function TestFrame({ title, img, textImg, textYes, textNo, nextSt
         updateSteps(false);
     };
 
+    // cập nhật bước kiểm tra và chuyển sang bước tiếp theo sau 1s 
     const updateSteps = (value: boolean) => {
         if (!stopTimeout) {
             setTimeout(() => {
@@ -61,8 +66,10 @@ export default function TestFrame({ title, img, textImg, textYes, textNo, nextSt
         }
     };
 
+    // kiểm tra xem tất cả các bước đã được chọn chưa
     const allStepsSelected = steps.every(step => step !== null);
 
+    // kiểm tra xem đã chọn đúng bước kiểm tra chưa 
     useEffect(() => {
         const backAction = () => {
             if (currentStep > 0) {
@@ -86,10 +93,15 @@ export default function TestFrame({ title, img, textImg, textYes, textNo, nextSt
             }
         };
 
+        // thêm sự kiện khi ấn nút back
         const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
-
+        // xóa sự kiện khi component bị hủy
         return () => backHandler.remove();
     }, [currentStep, goBackStep]);
+
+    const handleClosePopup = () => {
+        setOpenPopup(false); // Hide modal
+    };
 
     return (
         <LinearGradient
@@ -110,7 +122,21 @@ export default function TestFrame({ title, img, textImg, textYes, textNo, nextSt
             <View style={[styles.viewImage,
             selected === 1 && styles.viewImageClickYes,
             selected === 0 && styles.viewImageClickNo]}>
-                <Image source={img} style={styles.imgTest} />
+                {isVideo ? (
+                    <Video
+                        source={img}
+                        rate={1.0}
+                        volume={1.0}
+                        isMuted={false}
+                        shouldPlay
+                        isLooping
+                        resizeMode={ResizeMode.COVER}
+                        style={styles.imgTest}
+                    />
+                ) : (
+                    <Image source={img} style={styles.imgTest} />
+                )}
+
                 {selected === 1 && (
                     <AntDesign name="checkcircle" size={50} color="#73A442" style={styles.iconImg} />
                 )}
@@ -149,10 +175,19 @@ export default function TestFrame({ title, img, textImg, textYes, textNo, nextSt
                 text='XÁC NHẬN'
                 borderColor={allStepsSelected ? '#B70002' : '#B8B8B8'}
                 backgroundColor={allStepsSelected ? '#B70002' : '#B8B8B8'}
-                disabled={allStepsSelected ? false : true} />
+                disabled={allStepsSelected ? false : true}
+                onPress={() => setOpenPopup(true)}
+            />
 
             <TextNote text={'*Lưu ý: Hãy dừng bài tập ngay nếu cảm thấy không thoải mái.\n Đảm bảo vị trí tập an toàn để không té ngã.'} />
 
+            <Popup
+                visible={isOpenPopup}
+                title="CẢM ƠN"
+                textbody="Bạn đã tham gia bài kiểm tra sức khoẻ. Hãy tiếp tục để có thể nhận kết quả kiểm tra sức khoẻ của bạn."
+                buttonTextYes="TIẾP TỤC"
+                onClose={handleClosePopup}
+            />
         </LinearGradient>
     );
 }
