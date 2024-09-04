@@ -6,6 +6,7 @@ import TestStep1 from '../screens/test/TestStep1';
 import TestStep2 from '../screens/test/TestStep2';
 import TestStep3 from '../screens/test/TestStep3';
 import TestStep4 from '../screens/test/TestStep4';
+import SubmitFrame from '../screens/submit/SubmitFrame';
 
 // Định nghĩa kiểu dữ liệu cho danh sách các route
 export type RootStackParamList = {
@@ -14,6 +15,7 @@ export type RootStackParamList = {
     TestStep2: undefined;
     TestStep3: undefined;
     TestStep4: undefined;
+    SubmitFrame: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -33,6 +35,7 @@ const Navigation = () => {
                 <Stack.Screen name="TestStep2" component={TestStep2} />
                 <Stack.Screen name="TestStep3" component={TestStep3} />
                 <Stack.Screen name="TestStep4" component={TestStep4} />
+                <Stack.Screen name="SubmitFrame" component={SubmitFrame} />
             </Stack.Navigator>
         </NavigationContainer>
     );

@@ -187,6 +187,7 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
                 textbody="Bạn đã tham gia bài kiểm tra sức khoẻ. Hãy tiếp tục để có thể nhận kết quả kiểm tra sức khoẻ của bạn."
                 buttonTextYes="TIẾP TỤC"
                 onClose={handleClosePopup}
+                onPressYes={() => navigation.navigate('SubmitFrame')}
             />
         </LinearGradient>
     );

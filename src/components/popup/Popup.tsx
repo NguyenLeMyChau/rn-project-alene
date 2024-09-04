@@ -9,15 +9,17 @@ type PopupProps = {
     title: string;
     textbody: string;
     buttonTextYes: string;
+    onPressYes?: () => void;
 };
 
-export default function Popup({ visible = true, onClose, title, textbody, buttonTextYes }: PopupProps) {
+export default function Popup({ visible = true, onClose, title, textbody, buttonTextYes, onPressYes }: PopupProps) {
     const [showConfetti, setShowConfetti] = useState(false);
 
+    // hiển thị hiệu ứng confetti khi popup xuất hiện
     useEffect(() => {
         if (visible) {
             setShowConfetti(true);
-            setTimeout(() => setShowConfetti(false), 5000);  
+            setTimeout(() => setShowConfetti(false), 5000);
         }
     }, [visible]);
 
@@ -37,7 +39,7 @@ export default function Popup({ visible = true, onClose, title, textbody, button
                     <View style={styles.button}>
                         <ButtonCheck text='HUỶ' backgroundColor='white' borderColor='#B70002' color='#B70002' onPress={onClose} />
 
-                        <ButtonCheck text={buttonTextYes} />
+                        <ButtonCheck text={buttonTextYes} onPress={onPressYes} />
                     </View>
 
                 </View>

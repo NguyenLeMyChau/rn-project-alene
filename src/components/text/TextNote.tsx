@@ -4,12 +4,13 @@ import { StyleSheet, Text, View } from 'react-native';
 
 interface TextNoteProps {
     text: string;
+    textAlign?: 'center' | 'left' | 'right' | 'justify';
 }
 
-export default function TextNote({ text }: TextNoteProps) {
+export default function TextNote({ text, textAlign = 'center' }: TextNoteProps) {
 
     return (
-        <Text style={styles.text}>{text}</Text>
+        <Text style={[styles.text, { textAlign }]}>{text}</Text>
     );
 }
 
@@ -18,8 +19,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 9,
         fontWeight: '400',
-        textAlign:'center',
-        fontStyle:'italic',
+        fontStyle: 'italic',
         marginBottom: 10
     },
 });
