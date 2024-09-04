@@ -21,5 +21,7 @@ const styles = StyleSheet.create({
     logo: {
         resizeMode: 'contain',
         backgroundColor: 'transparent',
+        marginVertical: -30,
+        alignSelf: 'center',
     },
 });

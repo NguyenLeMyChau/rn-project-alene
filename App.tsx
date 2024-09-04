@@ -9,6 +9,7 @@ import TestStep3 from './src/screens/test/TestStep3';
 import TestStep4 from './src/screens/test/TestStep4';
 import { StepProvider } from './src/screens/test/StepProvider';
 import Popup from './src/components/popup/Popup';
+import SubmitFrame from './src/screens/submit/SubmitFrame';
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
       <StepProvider>
         <Navigation />
       </StepProvider>
+
     </View>
   );
 }

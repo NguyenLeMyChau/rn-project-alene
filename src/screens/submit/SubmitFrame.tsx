@@ -1,7 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import Header from '../../components/header/Header';
-import { StyleSheet, Text, View } from 'react-native';
 import Logo from '../../components/logo/Logo';
 import TextTitle from '../../components/text/TextTitle';
 import InputFrame from '../../components/input/InputFrame';
@@ -16,87 +16,92 @@ export default function SubmitFrame() {
     const [isChecked, setChecked] = useState(false);
 
     return (
-        <LinearGradient
-            colors={['#0E470E', '#20680D', '#2E820D', '#13500E']}
-            locations={[0, 0.4, 0.724, 1]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
+        <KeyboardAvoidingView
             style={styles.container}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
-            <Header currentPage={3} />
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                <LinearGradient
+                    colors={['#0E470E', '#20680D', '#2E820D', '#13500E']}
+                    locations={[0, 0.4, 0.724, 1]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.container}
+                >
+                    <Header currentPage={3} />
 
-            <View style={{ bottom: 25, marginBottom: -60 }}>
-                <Logo width={120} height={100} />
-            </View>
+                    <Logo width={120} height={100} />
 
-            <View style={{ paddingHorizontal: 30 }}>
-                <TextTitle text='HOÀN THÀNH BÀI KIỂM TRA' fontSize={13} only={true} />
-                <TextTitle text='XIN CHÚC MỪNG!' fontSize={26} height={30} only={true} />
+                    <View style={{ paddingHorizontal: 30 }}>
+                        <TextTitle text='HOÀN THÀNH BÀI KIỂM TRA' fontSize={13} only={true} />
+                        <TextTitle text='XIN CHÚC MỪNG!' fontSize={26} height={30} only={true} />
 
-                <Text style={styles.text}>Bạn có hệ Cơ-Xương-Khớp linh hoạt và có vẻ sức đề kháng của bạn cũng tốt.</Text>
+                        <Text style={styles.text}>Bạn có hệ Cơ-Xương-Khớp linh hoạt và có vẻ sức đề kháng của bạn cũng tốt.</Text>
 
-                <Text style={styles.textInput}>Điền thông tin bên dưới để xem đầy đủ
-                    kết quả và nhận ngay Voucher ưu đãi lên đến 100.000đ từ Anlene.</Text>
-            </View>
+                        <Text style={styles.textInput}>Điền thông tin bên dưới để xem đầy đủ
+                            kết quả và nhận ngay Voucher ưu đãi lên đến 100.000đ từ Anlene.</Text>
+                    </View>
 
-            <View style={{ width: '100%', paddingHorizontal: 20 }}>
-                <InputFrame
-                    label='Họ tên'
-                    placeholder='Nhập họ và tên'
-                    value={name}
-                    onChangeText={setName}
-                    isObligatory={true}
-                />
+                    <View style={{ paddingHorizontal: 20 }}>
+                        <InputFrame
+                            label='Họ tên'
+                            placeholder='Nhập họ và tên'
+                            value={name}
+                            onChangeText={setName}
+                            isObligatory={true}
+                        />
 
-                <InputFrame
-                    label='Số điện thoại'
-                    placeholder='Nhập số điện thoại'
-                    value={phone}
-                    onChangeText={setPhone}
-                    isObligatory={true}
-                />
+                        <InputFrame
+                            label='Số điện thoại'
+                            placeholder='Nhập số điện thoại'
+                            value={phone}
+                            onChangeText={setPhone}
+                            isObligatory={true}
+                        />
 
-                <InputFrame
-                    label='Email'
-                    placeholder='Nhập email'
-                    value={email}
-                    onChangeText={setEmail}
-                />
+                        <InputFrame
+                            label='Email'
+                            placeholder='Nhập email'
+                            value={email}
+                            onChangeText={setEmail}
+                        />
 
-                <View style={styles.section}>
+                        <View style={styles.section}>
 
-                    <View style={[styles.checkboxContainer, isChecked ? styles.checked : styles.unchecked]}>
-                        <Checkbox
-                            style={styles.checkbox}
-                            value={isChecked}
-                            onValueChange={setChecked}
-                            color={isChecked ? '#B70002' : 'white'}
+                            <View style={[styles.checkboxContainer, isChecked ? styles.checked : styles.unchecked]}>
+                                <Checkbox
+                                    style={styles.checkbox}
+                                    value={isChecked}
+                                    onValueChange={setChecked}
+                                    color={isChecked ? '#B70002' : 'white'}
+                                />
+                            </View>
+
+                            <Text style={styles.paragraph}>Tôi đồng ý để Anlene Vietnam liên hệ trong bất kỳ{'\n'} chương trình quảng cáo sản phẩm hay khuyến mãi nào</Text>
+                        </View>
+
+                        <Text style={styles.textConfirm}>Bằng cách điền bảng thông tin này, tôi đồng ý với việc thông{'\n'} tin của mình để xử lý dựa trên chính sách bảo mật của Anlene</Text>
+
+                    </View>
+
+                    <View style={{ flex: 1, justifyContent: 'center', alignSelf: 'center' }}>
+                        <ButtonCheck
+                            text='HOÀN THÀNH'
+                            borderColor='#B8B8B8'
+                            backgroundColor='#B8B8B8'
+                            disabled={true}
                         />
                     </View>
 
-                    <Text style={styles.paragraph}>Tôi đồng ý để Anlene Vietnam liên hệ trong bất kỳ{'\n'} chương trình quảng cáo sản phẩm hay khuyến mãi nào</Text>
-                </View>
-
-                <Text style={styles.textConfirm}>Bằng cách điền bảng thông tin này, tôi đồng ý với việc thông{'\n'} tin của mình để xử lý dựa trên chính sách bảo mật của Anlene</Text>
-
-                <View style={{ width: '60%', alignSelf: 'center', marginTop: 50 }}>
-                    <ButtonCheck
-                        text='HOÀN THÀNH'
-                        borderColor='#B8B8B8'
-                        backgroundColor='#B8B8B8'
-                        disabled={true}
-                    />
-                </View>
-
-            </View>
-        </LinearGradient>
+                </LinearGradient>
+            </ScrollView>
+        </KeyboardAvoidingView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
     },
 
     text: {
@@ -163,5 +168,4 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontStyle: 'italic',
     }
-
 });
