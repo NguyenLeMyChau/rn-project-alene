@@ -7,6 +7,7 @@ type StepContextType = {
     setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
     resetSteps: () => void;
     goBackStep: () => void;
+    goNextStep: (value: boolean) => void;
 };
 
 const StepContext = createContext<StepContextType | undefined>(undefined);
@@ -25,18 +26,37 @@ export const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
     };
 
     const goBackStep = () => {
-        if (currentStep > 0) {
-            setSteps(prevSteps => {
-                const updatedSteps = [...prevSteps];
+        setSteps(prevSteps => {
+            const updatedSteps = [...prevSteps];
+            if (currentStep === steps.length - 1 && updatedSteps[currentStep] !== null) {
+                updatedSteps[currentStep] = null;
+            } else if (currentStep > 0) {
                 updatedSteps[currentStep - 1] = null;
-                return updatedSteps;
-            });
-            setCurrentStep(currentStep - 1);
+                setCurrentStep(prevStep => prevStep - 1);
+            }
+            return updatedSteps;
+        });
+    };
+
+
+    const goNextStep = (value: boolean) => {
+        setSteps(prevSteps => {
+            const updatedSteps = [...prevSteps];
+            updatedSteps[currentStep] = value;
+            return updatedSteps;
+        });
+
+        if (currentStep < steps.length - 1) {
+            setCurrentStep(prevStep => prevStep + 1);
         }
+
+        console.log('current', currentStep);
+        console.log('steps', steps);
+
     };
 
     return (
-        <StepContext.Provider value={{ steps, setSteps, currentStep, setCurrentStep, resetSteps, goBackStep }}>
+        <StepContext.Provider value={{ steps, setSteps, currentStep, setCurrentStep, resetSteps, goBackStep, goNextStep }}>
             {children}
         </StepContext.Provider>
     );

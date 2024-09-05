@@ -19,30 +19,33 @@ type TestFrameProp = {
     textImg: string,
     textYes: string,
     textNo: string,
-    nextStep?: string,
     stopTimeout?: boolean
 }
 
-export default function TestFrame({ title, img, isVideo = true, textImg, textYes, textNo, nextStep, stopTimeout = false }: TestFrameProp) {
+export default function TestFrame({ title, img, isVideo = true, textImg, textYes, textNo, stopTimeout = false }: TestFrameProp) {
     const [selected, setSelected] = useState<number | null>(null);
     const navigation = useNavigation<NavigationProp<any>>();
-    const context = useContext(StepContext);
     const [isOpenPopup, setOpenPopup] = useState(false);
+    const [sizeIcon, setSizeIcon] = useState({ yes: 35, no: 35 });
+
+    const context = useContext(StepContext);
 
     if (!context) {
         throw new Error('StepContext must be used within a StepProvider');
     }
 
-    const { steps, setSteps, currentStep, setCurrentStep, goBackStep } = context;
+    const { steps, currentStep, goBackStep, goNextStep } = context;
 
     // dùng để chuyển sang bước tiếp theo
     const handleYesClick = () => {
         setSelected(1);
+        setSizeIcon({ yes: 45, no: 35 });
         updateSteps(true);
     };
 
     const handleNoClick = () => {
         setSelected(0);
+        setSizeIcon({ yes: 35, no: 45 });
         updateSteps(false);
     };
 
@@ -50,21 +53,13 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
     const updateSteps = (value: boolean) => {
         if (!stopTimeout) {
             setTimeout(() => {
-                const updatedSteps = [...steps];
-                updatedSteps[currentStep] = value;
-                setSteps(updatedSteps);
-                setCurrentStep(currentStep + 1);
-                if (nextStep) {
-                    navigation.navigate(nextStep as never);
-                }
-
+                goNextStep(value);
             }, 1000);
         } else {
-            const updatedSteps = [...steps];
-            updatedSteps[currentStep] = value;
-            setSteps(updatedSteps);
+            goNextStep(value);
         }
     };
+
 
     // kiểm tra xem tất cả các bước đã được chọn chưa
     const allStepsSelected = steps.every(step => step !== null);
@@ -73,15 +68,12 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
     useEffect(() => {
         const backAction = () => {
             if (currentStep > 0) {
-                const updatedSteps = [...steps];
-                updatedSteps[currentStep] = null;
-                setSteps(updatedSteps);
-
                 goBackStep();
-                navigation.goBack();
+                setSelected(null);
+                setSizeIcon({ yes: 35, no: 35 });
                 return true;
             } else {
-                Alert.alert("Hold on!", "Are you sure you want to go back?", [
+                Alert.alert("Hold on!", "Bạn muốn huỷ kết quả test này?", [
                     {
                         text: "Cancel",
                         onPress: () => null,
@@ -154,7 +146,7 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
                     onPress={handleYesClick}
                 >
                     <View style={styles.buttonIcon}>
-                        <AntDesign name="smile-circle" size={35} color="#478449" />
+                        <AntDesign name="smile-circle" size={sizeIcon.yes} color="#478449" />
                     </View>
                     <Text style={styles.textButton}>{textYes}</Text>
                 </TouchableOpacity>
@@ -164,7 +156,7 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
                     onPress={handleNoClick}
                 >
                     <View style={styles.buttonIcon}>
-                        <AntDesign name="frown" size={35} color="#E23F30" />
+                        <AntDesign name="frown" size={sizeIcon.no} color="#E23F30" />
                     </View>
                     <Text style={styles.textButton}>{textNo}</Text>
                 </TouchableOpacity>

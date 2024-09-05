@@ -1,6 +1,6 @@
-import TestFrame from "./TestFrame";
-import ImageTestXuong from '../../../assets/test-xuong.png';
-import VideoTestXuong from '../../../assets/videos/VideoTestXuong.mp4';
+import TestFrame from "../TestFrame";
+import VideoTestXuong from '../../../../assets/videos/VideoTestXuong.mp4';
+
 
 export default function TestStep2() {
 
@@ -11,7 +11,6 @@ export default function TestStep2() {
             textImg={'Duỗi 2 tay về phía trước, từ từ cúi xuống\n để chạm vào mũi bàn chân'}
             textYes="Được"
             textNo="Không được"
-            nextStep="TestStep3"
         />
     )
 }

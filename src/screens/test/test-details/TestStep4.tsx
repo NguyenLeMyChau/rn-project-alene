@@ -1,5 +1,5 @@
-import TestFrame from "./TestFrame";
-import ImageTestDeKhang from '../../../assets/test-dekhang.png';
+import TestFrame from "../TestFrame";
+import ImageTestDeKhang from '../../../../assets/test-dekhang.png';
 
 export default function TestStep4() {
 

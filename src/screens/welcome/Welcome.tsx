@@ -47,7 +47,7 @@ export default function Welcome() {
                 </View>
 
                 <View style={styles.buttonCheck}>
-                    <ButtonCheck text='KIỂM TRA NGAY' fontSize={20} borderColor='#E1D770' onPress={async () => { resetSteps(), navigation.navigate('TestStep1') }} />
+                    <ButtonCheck text='KIỂM TRA NGAY' fontSize={20} borderColor='#E1D770' onPress={async () => { resetSteps(), navigation.navigate('Test') }} />
                 </View>
 
 
