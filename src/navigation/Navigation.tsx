@@ -4,6 +4,7 @@ import { createStackNavigator, StackNavigationOptions } from '@react-navigation/
 import Welcome from '../screens/welcome/Welcome';
 import SubmitFrame from '../screens/submit/SubmitFrame';
 import Test from '../screens/test/Test';
+import { StepProvider } from '../hook/StepProvider';
 
 // Định nghĩa kiểu dữ liệu cho danh sách các route
 export type RootStackParamList = {
@@ -21,13 +22,15 @@ const screenOptions: StackNavigationOptions = {
 const Navigation = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator
-                initialRouteName="Welcome"
-                screenOptions={screenOptions}>
-                <Stack.Screen name="Welcome" component={Welcome} />
-                <Stack.Screen name="Test" component={Test} />
-                <Stack.Screen name="SubmitFrame" component={SubmitFrame} />
-            </Stack.Navigator>
+            <StepProvider>
+                <Stack.Navigator
+                    initialRouteName="Welcome"
+                    screenOptions={screenOptions}>
+                    <Stack.Screen name="Welcome" component={Welcome} />
+                    <Stack.Screen name="Test" component={Test} />
+                    <Stack.Screen name="SubmitFrame" component={SubmitFrame} />
+                </Stack.Navigator>
+            </StepProvider>
         </NavigationContainer>
     );
 };

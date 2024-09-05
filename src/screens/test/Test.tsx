@@ -4,7 +4,7 @@ import TestStep1 from './test-details/TestStep1'; // Import các bước khác n
 import TestStep2 from './test-details/TestStep2';
 import TestStep3 from './test-details/TestStep3';
 import TestStep4 from './test-details/TestStep4';
-import StepContext from './StepProvider';
+import StepContext from '../../hook/StepProvider';
 
 const steps = [
     { id: '1', component: <TestStep1 /> },
@@ -33,6 +33,12 @@ export default function Test() {
 
     }, [currentStep]);
 
+    const getItemLayout = (data: any, index: number) => ({
+        length: screenWidth,
+        offset: screenWidth * index,
+        index,
+    });
+
     return (
         <View style={styles.container}>
             <FlatList
@@ -48,6 +54,7 @@ export default function Test() {
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
                 scrollEnabled={false}
+                getItemLayout={getItemLayout}
             />
 
         </View>

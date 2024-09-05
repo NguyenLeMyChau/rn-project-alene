@@ -1,4 +1,4 @@
-import TestFrame from "../TestFrame";
+import TestFrame from "../../../components/frame/TestFrame";
 import VideoTestCo from '../../../../assets/videos/VideoTestCo.mp4';
 
 export default function TestStep1() {

@@ -1,4 +1,4 @@
-import TestFrame from "../TestFrame";
+import TestFrame from "../../../components/frame/TestFrame";
 import VideoTestXuong from '../../../../assets/videos/VideoTestXuong.mp4';
 
 

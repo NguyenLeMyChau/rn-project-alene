@@ -5,7 +5,7 @@ type FrameWelcomeProps = {
     text?: string;
 };
 
-export default function FrameWelcome({ text }: FrameWelcomeProps) {
+export default function WelcomeFrame({ text }: FrameWelcomeProps) {
     return (
         <LinearGradient
             colors={['#FFC200', '#F1ED86', '#ECD24A', '#ECD24A', '#FFC200']}

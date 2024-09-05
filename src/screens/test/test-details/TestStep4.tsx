@@ -1,4 +1,4 @@
-import TestFrame from "../TestFrame";
+import TestFrame from "../../../components/frame/TestFrame";
 import ImageTestDeKhang from '../../../../assets/test-dekhang.png';
 
 export default function TestStep4() {

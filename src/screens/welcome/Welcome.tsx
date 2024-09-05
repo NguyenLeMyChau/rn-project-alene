@@ -6,10 +6,10 @@ import Page1 from '../../../assets/page1.png';
 import ButtonCheck from '../../components/button/ButtonCheck';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../navigation/Navigation';
-import FrameWelcome from '../../components/frame/FrameWelcome';
+import WelcomeFrame from '../../components/frame/WelcomeFrame';
 import TextNote from '../../components/text/TextNote';
 import { useContext } from 'react';
-import StepContext from '../test/StepProvider';
+import StepContext from '../../hook/StepProvider';
 
 export default function Welcome() {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -63,9 +63,9 @@ export default function Welcome() {
                     style={styles.containerFooter}
                 >
                     <View style={styles.footerContainer}>
-                        <FrameWelcome text={'MIỄN\nPHÍ'} />
-                        <FrameWelcome text={'CHỈ \n5 PHÚT'} />
-                        <FrameWelcome text={'Voucher\n100K'} />
+                        <WelcomeFrame text={'MIỄN\nPHÍ'} />
+                        <WelcomeFrame text={'CHỈ \n5 PHÚT'} />
+                        <WelcomeFrame text={'Voucher\n100K'} />
                     </View>
 
                     <TextNote text={'Bài kiểm tra Cơ, Xương, Khớp này được phát triển bởi đội ngũ Anlene'} />

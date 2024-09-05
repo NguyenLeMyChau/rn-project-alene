@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import StepContext from './StepProvider';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import StepContext from '../../../hook/StepProvider';
 
 export default function TestStep() {
     const context = useContext(StepContext);

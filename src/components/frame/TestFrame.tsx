@@ -2,15 +2,15 @@ import React, { useContext, useEffect, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Alert, BackHandler, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Header from '../../components/header/Header';
-import TestStep from './TestStep';
 import TextTitle from '../../components/text/TextTitle';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import ButtonCheck from '../../components/button/ButtonCheck';
 import TextNote from '../../components/text/TextNote';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import StepContext from './StepProvider';
+import StepContext from '../../hook/StepProvider';
 import { ResizeMode, Video } from 'expo-av';
 import Popup from '../../components/popup/Popup';
+import TestStep from '../../screens/test/steps/TestStep';
 
 type TestFrameProp = {
     title: string,
@@ -34,62 +34,24 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
         throw new Error('StepContext must be used within a StepProvider');
     }
 
-    const { steps, currentStep, goBackStep, goNextStep } = context;
+    const { steps, updateSteps } = context;
+
+    // kiểm tra xem tất cả các bước đã được chọn chưa
+    const allStepsSelected = steps.every(step => step !== null);
 
     // dùng để chuyển sang bước tiếp theo
     const handleYesClick = () => {
         setSelected(1);
         setSizeIcon({ yes: 45, no: 35 });
-        updateSteps(true);
+        updateSteps(stopTimeout, true);
     };
 
     const handleNoClick = () => {
         setSelected(0);
         setSizeIcon({ yes: 35, no: 45 });
-        updateSteps(false);
+        updateSteps(stopTimeout, false);
     };
 
-    // cập nhật bước kiểm tra và chuyển sang bước tiếp theo sau 1s 
-    const updateSteps = (value: boolean) => {
-        if (!stopTimeout) {
-            setTimeout(() => {
-                goNextStep(value);
-            }, 1000);
-        } else {
-            goNextStep(value);
-        }
-    };
-
-
-    // kiểm tra xem tất cả các bước đã được chọn chưa
-    const allStepsSelected = steps.every(step => step !== null);
-
-    // kiểm tra xem đã chọn đúng bước kiểm tra chưa 
-    useEffect(() => {
-        const backAction = () => {
-            if (currentStep > 0) {
-                goBackStep();
-                setSelected(null);
-                setSizeIcon({ yes: 35, no: 35 });
-                return true;
-            } else {
-                Alert.alert("Hold on!", "Bạn muốn huỷ kết quả test này?", [
-                    {
-                        text: "Cancel",
-                        onPress: () => null,
-                        style: "cancel"
-                    },
-                    { text: "YES", onPress: () => navigation.goBack() }
-                ]);
-                return true;
-            }
-        };
-
-        // thêm sự kiện khi ấn nút back
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
-        // xóa sự kiện khi component bị hủy
-        return () => backHandler.remove();
-    }, [currentStep, goBackStep]);
 
     const handleClosePopup = () => {
         setOpenPopup(false); // Hide modal
