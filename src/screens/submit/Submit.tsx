@@ -1,23 +1,31 @@
-import { LinearGradient } from 'expo-linear-gradient';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import Header from '../../components/header/Header';
 import Logo from '../../components/logo/Logo';
 import TextTitle from '../../components/text/TextTitle';
 import InputFrame from '../../components/input/InputFrame';
 import Checkbox from 'expo-checkbox';
-import TextNote from '../../components/text/TextNote';
 import ButtonCheck from '../../components/button/ButtonCheck';
 import BackgroundColor from '../../components/backgroundColor/BackgroundColor';
+import StepContext from '../../hook/StepProvider';
+import { dataResult } from '../../data/dataResult';
 
-export default function SubmitFrame() {
+export default function Submit() {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [isChecked, setChecked] = useState(false);
 
+    const context = useContext(StepContext);
+    if (!context) {
+        throw new Error('StepContext must be used within a StepProvider');
+    }
+    const { result } = context;
+
+    const resultData = dataResult.find(item => item.result === result) || { title: '', textBody: '' };
+
     return (
-        <BackgroundColor stateStrength='bad'>
+        <BackgroundColor stateStrength={result}>
 
             <KeyboardAvoidingView
                 style={styles.container}
@@ -29,10 +37,10 @@ export default function SubmitFrame() {
                     <Logo width={120} height={100} />
 
                     <View style={{ paddingHorizontal: 30 }}>
-                        <TextTitle text='HOÀN THÀNH BÀI KIỂM TRA' fontSize={13} only={true} />
-                        <TextTitle text='XIN CHÚC MỪNG!' fontSize={26} height={30} only={true} />
+                        <TextTitle text='HOÀN THÀNH BÀI KIỂM TRA' fontSize={13} result={result} />
+                        <TextTitle text={resultData.title} fontSize={24} height={34} result={result} />
 
-                        <Text style={styles.text}>Bạn có hệ Cơ-Xương-Khớp linh hoạt và có vẻ sức đề kháng của bạn cũng tốt.</Text>
+                        <Text style={styles.text}>{resultData.textBody}</Text>
 
                         <Text style={styles.textInput}>Điền thông tin bên dưới để xem đầy đủ
                             kết quả và nhận ngay Voucher ưu đãi lên đến 100.000đ từ Anlene.</Text>
@@ -45,6 +53,7 @@ export default function SubmitFrame() {
                             value={name}
                             onChangeText={setName}
                             isObligatory={true}
+                            result={result}
                         />
 
                         <InputFrame
@@ -53,6 +62,7 @@ export default function SubmitFrame() {
                             value={phone}
                             onChangeText={setPhone}
                             isObligatory={true}
+                            result={result}
                         />
 
                         <InputFrame
@@ -107,8 +117,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         lineHeight: 18,
         fontWeight: '600',
-        marginVertical: 10,
-        paddingHorizontal: 20,
+        marginVertical: 2,
+        paddingHorizontal: 15,
     },
 
     textInput: {

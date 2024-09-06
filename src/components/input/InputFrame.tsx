@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 type InputFrameProps = {
@@ -7,11 +7,23 @@ type InputFrameProps = {
     value: string;
     onChangeText: (text: string) => void;
     isObligatory?: boolean;
+    result?: string | null;
 }
-export default function InputFrame({ label, placeholder = '', value, onChangeText, isObligatory = false }: InputFrameProps) {
+
+export default function InputFrame({ label, placeholder = '', value, onChangeText, isObligatory = false, result }: InputFrameProps) {
+    const [colorObligatory, setColorObligatory] = useState('#ECD24A');
+
+    useEffect(() => {
+        if (result === 'normal') {
+            setColorObligatory('#187B33');
+        } else {
+            setColorObligatory('#ECD24A');
+        }
+    }, [result]);
+
     return (
         <View style={styles.container}>
-            <Text style={styles.label}>{label}:{isObligatory ? <Text style={{ ...styles.label, color: '#ECD24A' }}>*</Text> : null}</Text>
+            <Text style={styles.label}>{label}:{isObligatory ? <Text style={{ ...styles.label, color: colorObligatory }}>*</Text> : null}</Text>
             <TextInput
                 style={[
                     styles.input,
@@ -22,7 +34,7 @@ export default function InputFrame({ label, placeholder = '', value, onChangeTex
             />
 
             {value === '' && isObligatory
-                ? <Text style={{ fontSize: 12, color: '#ECD24A', top: 3 }}>Vui lòng {placeholder.toLowerCase()}</Text>
+                ? <Text style={{ fontSize: 12, color: colorObligatory, top: 3 }}>Vui lòng {placeholder.toLowerCase()}</Text>
                 : null}
         </View>
     );
@@ -31,7 +43,7 @@ export default function InputFrame({ label, placeholder = '', value, onChangeTex
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        marginTop: 10,
+        marginTop: 5,
         justifyContent: 'center',
     },
     label: {
@@ -43,7 +55,7 @@ const styles = StyleSheet.create({
         height: 45,
         paddingLeft: 20,
         color: 'black',
-        backgroundColor:'white',
+        backgroundColor: 'white',
         borderRadius: 5,
     },
     inputError: {

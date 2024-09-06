@@ -14,6 +14,7 @@ type StepContextType = {
     goNextStep: (value: boolean) => void;
     updateSteps: (valueStep: boolean) => void;
     data: any[];
+    result: string | null;
 };
 
 const StepContext = createContext<StepContextType | undefined>(undefined);
@@ -162,7 +163,7 @@ export const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
     }, [currentStep, goBackStep]);
 
     return (
-        <StepContext.Provider value={{ steps, setSteps, currentStep, setCurrentStep, resetSteps, updateSteps, goBackStep, goNextStep, data }}>
+        <StepContext.Provider value={{ steps, setSteps, currentStep, setCurrentStep, resetSteps, updateSteps, goBackStep, goNextStep, data, result }}>
             {children}
         </StepContext.Provider>
     );

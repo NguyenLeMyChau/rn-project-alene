@@ -3,7 +3,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 type BackgroundColorProps = {
-    stateStrength?: string;
+    stateStrength?: string | null;
     children: ReactNode; // Thêm prop children để nhận các phần tử con
 }
 export default function BackgroundColor({ stateStrength = 'good', children }: BackgroundColorProps) {

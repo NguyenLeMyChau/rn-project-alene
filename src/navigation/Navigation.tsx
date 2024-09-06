@@ -2,14 +2,14 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
 import Welcome from '../screens/welcome/Welcome';
-import SubmitFrame from '../screens/submit/SubmitFrame';
+import Submit from '../screens/submit/Submit';
 import Test from '../screens/test/Test';
 import { StepProvider } from '../hook/StepProvider';
 
 // Định nghĩa kiểu dữ liệu cho danh sách các route
 export type RootStackParamList = {
     Welcome: undefined;
-    SubmitFrame: undefined;
+    Submit: undefined;
     Test: undefined;
 };
 
@@ -28,7 +28,7 @@ const Navigation = () => {
                     screenOptions={screenOptions}>
                     <Stack.Screen name="Welcome" component={Welcome} />
                     <Stack.Screen name="Test" component={Test} />
-                    <Stack.Screen name="SubmitFrame" component={SubmitFrame} />
+                    <Stack.Screen name="Submit" component={Submit} />
                 </Stack.Navigator>
             </StepProvider>
         </NavigationContainer>

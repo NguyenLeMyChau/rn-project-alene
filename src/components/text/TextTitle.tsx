@@ -6,11 +6,11 @@ interface TextTitleProps {
     text: string;
     fontSize?: number;
     height?: number;
-    only?: boolean;
+    result?: string | null;
 
 }
 
-export default function TextTitle({ text, fontSize = 22, height = 27, only = false }: TextTitleProps) {
+export default function TextTitle({ text, fontSize = 22, height = 27, result }: TextTitleProps) {
     const textLength = text.length;
     const locations = textLength >= 30
         ? [0, 0.35, 0.65, 1]
@@ -19,8 +19,17 @@ export default function TextTitle({ text, fontSize = 22, height = 27, only = fal
         ? ['#BA872C', '#E8E276', '#E1D770', '#885021']
         : ['#7A5A1C', '#E8E276', '#E8E276', '#7A5A1C'];
 
-    const onlyColors = ['#FFC200', '#F1ED86', '#ECD24A', '#ECD24A', '#FFC200'];
-    const onlyLocations = [0, 0.25, 0.7, 0.8, 1];
+    const goodColor = ['#FFC200', '#F1ED86', '#ECD24A', '#ECD24A', '#FFC200'];
+    const goodLocations = [0, 0.25, 0.7, 0.8, 1];
+
+    const normalColor = ['#376E48', '#187B33'];
+    const normalLocations = [0, 0.5];
+
+    const badColor = ['#DF1E13', '#C62828'];
+    const badLocations = [0, 0.5];
+
+    const resultColor = result === 'good' ? goodColor : result === 'normal' ? normalColor : badColor;
+    const resultLocations = result === 'good' ? goodLocations : result === 'normal' ? normalLocations : badLocations;
 
     return (
         <MaskedView
@@ -34,8 +43,8 @@ export default function TextTitle({ text, fontSize = 22, height = 27, only = fal
             }
         >
             <LinearGradient
-                colors={only ? onlyColors : colors}
-                locations={only ? onlyLocations : locations}
+                colors={result ? resultColor : colors}
+                locations={result ? resultLocations : locations}
                 start={{ x: 0, y: 0.5 }}
                 end={{ x: 1, y: 2 }}
                 style={styles.gradient}
