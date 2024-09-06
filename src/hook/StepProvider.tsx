@@ -26,6 +26,9 @@ export const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
     const [steps, setSteps] = useState<(boolean | null)[]>([]);
     const [currentStep, setCurrentStep] = useState<number>(0);
     const [data, setData] = useState<any[]>([]);
+    const [assessmentData, setAssessmentData] = useState<any[]>([]);
+    const [result, setResult] = useState<string | null>(null); // Thêm state để lưu kết quả
+
     const navigation = useNavigation<NavigationProp<any>>();
 
     // Subscribe to tasks: Xử lý realtime khi có sự thay đổi từ Firestore
@@ -38,8 +41,20 @@ export const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
         });
     };
 
+    const fetchAssessmentData = async () => {
+        try {
+            const querySnapshot = await getDocs(collection(db, 'assessment-table'));
+            const data = querySnapshot.docs.map(doc => doc.data());
+            setAssessmentData(data);
+        } catch (error) {
+            console.error('Error fetching assessment data:', error);
+        }
+    };
+
+
     useEffect(() => {
         subscribeToTasks();
+        fetchAssessmentData();
     }, []);
 
     useEffect(() => {
@@ -51,6 +66,7 @@ export const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
     const resetSteps = () => {
         setSteps(Array(data.length).fill(null));
         setCurrentStep(0);
+        setResult(null);
     };
 
     // quay lại bước trước đó
@@ -70,15 +86,26 @@ export const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
     };
 
     // chuyển sang bước tiếp theo
-    const goNextStep = (value: boolean) => {
-        setSteps(prevSteps => {
-            const updatedSteps = [...prevSteps];
-            updatedSteps[currentStep] = value; // set giá trị cho bước hiện tại
-            return updatedSteps; // trả về mảng mới
-        });
-        if (currentStep < steps.length - 1) { // nếu chưa phải bước cuối cùng
+    const goNextStep = async (value: boolean) => {
+        const updatedSteps = [...steps];
+        updatedSteps[currentStep] = value; // set giá trị cho bước hiện tại
+        setSteps(updatedSteps);
+
+        if (currentStep !== steps.length - 1) {
             setCurrentStep(prevStep => prevStep + 1); // tăng bước hiện tại lên 1
         }
+
+
+    };
+
+    // Hàm so sánh các bước với dữ liệu trên Firebase
+    const compareStepsWithFirebase = async (): Promise<string | null> => {
+        for (const assessment of assessmentData) {
+            if (JSON.stringify(assessment.steps) === JSON.stringify(steps)) {
+                return assessment.result;
+            }
+        }
+        return "No matching result";
     };
 
     // cập nhật bước kiểm tra và chuyển sang bước tiếp theo sau 1s
@@ -93,8 +120,19 @@ export const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
     };
 
     useEffect(() => {
-        console.log(steps);
-        console.log(currentStep);
+        const checkResult = async () => {
+            console.log(steps);
+            console.log(currentStep);
+            const updatedSteps = [...steps];
+
+            if (currentStep === steps.length - 1 && updatedSteps[currentStep] !== null) {
+                const result = await compareStepsWithFirebase();
+                setResult(result);
+                console.log(result);
+            }
+        };
+
+        checkResult();
     }, [steps]);
 
 
