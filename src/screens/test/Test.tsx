@@ -1,33 +1,21 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FlatList, View, StyleSheet, Button, Dimensions } from 'react-native';
-import TestStep1 from './test-details/TestStep1'; // Import các bước khác nếu cần
-import TestStep2 from './test-details/TestStep2';
-import TestStep3 from './test-details/TestStep3';
-import TestStep4 from './test-details/TestStep4';
 import StepContext from '../../hook/StepProvider';
-
-const steps = [
-    { id: '1', component: <TestStep1 /> },
-    { id: '2', component: <TestStep2 /> },
-    { id: '3', component: <TestStep3 /> },
-    { id: '4', component: <TestStep4 /> },
-];
-
+import TestFrame from '../../components/frame/TestFrame';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 export default function Test() {
-    const flatListRef = useRef<FlatList>(null);
-
+    const flatListRef = useRef<FlatList>(null); // ref cho FlatList
 
     const context = useContext(StepContext);
     if (!context) {
         throw new Error('StepContext must be used within a StepProvider');
     }
-    const { currentStep } = context;
+    const { currentStep, data } = context;
 
     useEffect(() => {
-        if (flatListRef.current && currentStep >= 0 && currentStep < steps.length) {
+        if (flatListRef.current && currentStep >= 0 && currentStep < data.length) {
             flatListRef.current.scrollToIndex({ index: currentStep, animated: true });
         }
 
@@ -43,10 +31,18 @@ export default function Test() {
         <View style={styles.container}>
             <FlatList
                 ref={flatListRef}
-                data={steps}
+                data={data}
                 renderItem={({ item }) => (
                     <View style={{ width: screenWidth }}>
-                        {item.component}
+                        <TestFrame
+                            title={item.title}
+                            img={item.img}
+                            textImg={item.textImg}
+                            textYes={item.textYes}
+                            textNo={item.textNo}
+                            isVideo={item.isVideo}
+                            stopTimeout={item.stopTimeout}
+                        />
                     </View>
                 )}
                 keyExtractor={item => item.id}

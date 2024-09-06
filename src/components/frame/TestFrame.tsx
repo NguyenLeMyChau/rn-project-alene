@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Alert, BackHandler, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, BackHandler, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Header from '../../components/header/Header';
 import TextTitle from '../../components/text/TextTitle';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -8,13 +8,13 @@ import ButtonCheck from '../../components/button/ButtonCheck';
 import TextNote from '../../components/text/TextNote';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import StepContext from '../../hook/StepProvider';
-import { ResizeMode, Video } from 'expo-av';
+import { AVPlaybackStatus, ResizeMode, Video } from 'expo-av';
 import Popup from '../../components/popup/Popup';
 import TestStep from '../../screens/test/steps/TestStep';
 
 type TestFrameProp = {
     title: string,
-    img: any,
+    img: string | any,
     isVideo?: boolean,
     textImg: string,
     textYes: string,
@@ -27,17 +27,30 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
     const navigation = useNavigation<NavigationProp<any>>();
     const [isOpenPopup, setOpenPopup] = useState(false);
     const [sizeIcon, setSizeIcon] = useState({ yes: 35, no: 35 });
+    const [isLoading, setIsLoading] = useState(true);
+
+    const handleLoad = () => {
+        setIsLoading(false);
+    };
 
     const context = useContext(StepContext);
-
     if (!context) {
         throw new Error('StepContext must be used within a StepProvider');
     }
-
-    const { steps, updateSteps } = context;
+    const { steps, updateSteps, currentStep } = context;
 
     // kiểm tra xem tất cả các bước đã được chọn chưa
     const allStepsSelected = steps.every(step => step !== null);
+
+    useEffect(() => {
+        if (steps[currentStep] === true) {
+            setSelected(1);
+        } else if (steps[currentStep] === false) {
+            setSelected(0);
+        } else {
+            setSelected(null);
+        }
+    }, [steps, currentStep]);
 
     // dùng để chuyển sang bước tiếp theo
     const handleYesClick = () => {
@@ -76,19 +89,22 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
             <View style={[styles.viewImage,
             selected === 1 && styles.viewImageClickYes,
             selected === 0 && styles.viewImageClickNo]}>
+                {isLoading && <ActivityIndicator size="large" color="#C4C4C4" style={styles.imgTest} />}
                 {isVideo ? (
                     <Video
-                        source={img}
+                        source={{ uri: img }}
                         rate={1.0}
                         volume={1.0}
                         isMuted={false}
-                        shouldPlay
-                        isLooping
+                        shouldPlay={true} // auto play
+                        isLooping={true} // loop
                         resizeMode={ResizeMode.COVER}
                         style={styles.imgTest}
+                        useNativeControls={true} // show control
+                        onLoad={handleLoad}
                     />
                 ) : (
-                    <Image source={img} style={styles.imgTest} />
+                    <Image source={{ uri: img }} style={styles.imgTest} onLoad={handleLoad} />
                 )}
 
                 {selected === 1 && (
@@ -201,7 +217,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginVertical: 10,
         fontWeight: '500',
-        lineHeight: 21
+        lineHeight: 21,
+        paddingHorizontal: 60
     },
 
     containerButton: {

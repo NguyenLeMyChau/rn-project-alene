@@ -1,6 +1,8 @@
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { collection, getDocs, onSnapshot, query } from 'firebase/firestore';
 import React, { createContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { Alert, BackHandler } from 'react-native';
+import { db } from '../config/firebaseConfig';
 
 type StepContextType = {
     steps: (boolean | null)[];
@@ -11,6 +13,7 @@ type StepContextType = {
     goBackStep: () => void;
     goNextStep: (value: boolean) => void;
     updateSteps: (stopTimeout: boolean, valueStep: boolean) => void;
+    data: any;
 };
 
 const StepContext = createContext<StepContextType | undefined>(undefined);
@@ -22,13 +25,29 @@ type StepProviderProps = {
 export const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
     const [steps, setSteps] = useState<(boolean | null)[]>([null, null, null, null]);
     const [currentStep, setCurrentStep] = useState<number>(0);
+    const [data, setData] = useState<any>(null);
     const navigation = useNavigation<NavigationProp<any>>();
 
+    // Subscribe to tasks: Xử lý realtime khi có sự thay đổi từ Firestore
+    const subscribeToTasks = () => {
+        const q = query(collection(db, 'test-steps'));
+        return onSnapshot(q, (snapshot) => {
+            const dataStep = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+            setData(dataStep);
+        });
+    };
+
+    useEffect(() => {
+        subscribeToTasks();
+    }, []);
+
+    // reset lại các bước kiểm tra
     const resetSteps = () => {
         setSteps([null, null, null, null]);
         setCurrentStep(0);
     };
 
+    // quay lại bước trước đó
     const goBackStep = () => {
         setSteps(prevSteps => {
             const updatedSteps = [...prevSteps]; // tạo mảng mới từ mảng cũ
@@ -44,6 +63,7 @@ export const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
         });
     };
 
+    // chuyển sang bước tiếp theo
     const goNextStep = (value: boolean) => {
         setSteps(prevSteps => {
             const updatedSteps = [...prevSteps];
@@ -79,7 +99,7 @@ export const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
                 goBackStep();
                 return true;
             } else {
-                Alert.alert("Hold on!", "Bạn muốn huỷ kết quả test này?", [
+                Alert.alert("Cảnh báo", "Bạn muốn huỷ kết quả test này?", [
                     {
                         text: "Cancel",
                         onPress: () => null,
@@ -98,7 +118,7 @@ export const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
     }, [currentStep, goBackStep]);
 
     return (
-        <StepContext.Provider value={{ steps, setSteps, currentStep, setCurrentStep, resetSteps, updateSteps, goBackStep, goNextStep }}>
+        <StepContext.Provider value={{ steps, setSteps, currentStep, setCurrentStep, resetSteps, updateSteps, goBackStep, goNextStep, data }}>
             {children}
         </StepContext.Provider>
     );
