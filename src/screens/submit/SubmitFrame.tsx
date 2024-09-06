@@ -8,6 +8,7 @@ import InputFrame from '../../components/input/InputFrame';
 import Checkbox from 'expo-checkbox';
 import TextNote from '../../components/text/TextNote';
 import ButtonCheck from '../../components/button/ButtonCheck';
+import BackgroundColor from '../../components/backgroundColor/BackgroundColor';
 
 export default function SubmitFrame() {
     const [name, setName] = useState('');
@@ -16,18 +17,13 @@ export default function SubmitFrame() {
     const [isChecked, setChecked] = useState(false);
 
     return (
-        <KeyboardAvoidingView
-            style={styles.container}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        >
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                <LinearGradient
-                    colors={['#0E470E', '#20680D', '#2E820D', '#13500E']}
-                    locations={[0, 0.4, 0.724, 1]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                    style={styles.container}
-                >
+        <BackgroundColor stateStrength='bad'>
+
+            <KeyboardAvoidingView
+                style={styles.container}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                     <Header currentPage={3} />
 
                     <Logo width={120} height={100} />
@@ -93,9 +89,10 @@ export default function SubmitFrame() {
                         />
                     </View>
 
-                </LinearGradient>
-            </ScrollView>
-        </KeyboardAvoidingView>
+                </ScrollView>
+            </KeyboardAvoidingView>
+        </BackgroundColor>
+
     );
 }
 

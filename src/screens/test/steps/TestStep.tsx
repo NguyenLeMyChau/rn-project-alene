@@ -12,7 +12,7 @@ export default function TestStep() {
         throw new Error('StepContext must be used within a StepProvider');
     }
 
-    const { steps, currentStep } = context;
+    const { steps, currentStep, data } = context;
 
     const allStepsCompleted = steps.every(step => step !== null);
 
@@ -46,7 +46,7 @@ export default function TestStep() {
                                 </View>
                             )
                         )}
-                        <Text style={styles.label}>{['Cơ', 'Xương', 'Khớp', 'Đề kháng'][index]}</Text>
+                        <Text style={styles.label}>{data[index]?.textStep}</Text>
                     </View>
                     {index < steps.length - 1 && <View style={styles.line} />}
                 </React.Fragment>

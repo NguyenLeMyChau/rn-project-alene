@@ -19,10 +19,9 @@ type TestFrameProp = {
     textImg: string,
     textYes: string,
     textNo: string,
-    stopTimeout?: boolean
 }
 
-export default function TestFrame({ title, img, isVideo = true, textImg, textYes, textNo, stopTimeout = false }: TestFrameProp) {
+export default function TestFrame({ title, img, isVideo = true, textImg, textYes, textNo }: TestFrameProp) {
     const [selected, setSelected] = useState<number | null>(null);
     const navigation = useNavigation<NavigationProp<any>>();
     const [isOpenPopup, setOpenPopup] = useState(false);
@@ -56,13 +55,13 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
     const handleYesClick = () => {
         setSelected(1);
         setSizeIcon({ yes: 45, no: 35 });
-        updateSteps(stopTimeout, true);
+        updateSteps(true);
     };
 
     const handleNoClick = () => {
         setSelected(0);
         setSizeIcon({ yes: 35, no: 45 });
-        updateSteps(stopTimeout, false);
+        updateSteps(false);
     };
 
 

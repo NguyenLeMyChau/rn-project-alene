@@ -12,8 +12,8 @@ type StepContextType = {
     resetSteps: () => void;
     goBackStep: () => void;
     goNextStep: (value: boolean) => void;
-    updateSteps: (stopTimeout: boolean, valueStep: boolean) => void;
-    data: any;
+    updateSteps: (valueStep: boolean) => void;
+    data: any[];
 };
 
 const StepContext = createContext<StepContextType | undefined>(undefined);
@@ -23,9 +23,9 @@ type StepProviderProps = {
 };
 
 export const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
-    const [steps, setSteps] = useState<(boolean | null)[]>([null, null, null, null]);
+    const [steps, setSteps] = useState<(boolean | null)[]>([]);
     const [currentStep, setCurrentStep] = useState<number>(0);
-    const [data, setData] = useState<any>(null);
+    const [data, setData] = useState<any[]>([]);
     const navigation = useNavigation<NavigationProp<any>>();
 
     // Subscribe to tasks: Xử lý realtime khi có sự thay đổi từ Firestore
@@ -34,6 +34,7 @@ export const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
         return onSnapshot(q, (snapshot) => {
             const dataStep = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
             setData(dataStep);
+            console.log(dataStep.length)
         });
     };
 
@@ -41,9 +42,14 @@ export const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
         subscribeToTasks();
     }, []);
 
+    useEffect(() => {
+        setSteps(Array(data.length).fill(null));
+        console.log(data.length)
+    }, [data]);
+
     // reset lại các bước kiểm tra
     const resetSteps = () => {
-        setSteps([null, null, null, null]);
+        setSteps(Array(data.length).fill(null));
         setCurrentStep(0);
     };
 
@@ -76,13 +82,13 @@ export const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
     };
 
     // cập nhật bước kiểm tra và chuyển sang bước tiếp theo sau 1s
-    const updateSteps = (stopTimeout: boolean, valueStep: boolean) => {
-        if (!stopTimeout) {
+    const updateSteps = (valueStep: boolean) => {
+        if (currentStep === steps.length - 1) {
+            goNextStep(valueStep);
+        } else {
             setTimeout(() => {
                 goNextStep(valueStep);
             }, 1000);
-        } else {
-            goNextStep(valueStep);
         }
     };
 

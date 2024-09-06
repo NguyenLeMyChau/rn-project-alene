@@ -41,7 +41,6 @@ export default function Test() {
                             textYes={item.textYes}
                             textNo={item.textNo}
                             isVideo={item.isVideo}
-                            stopTimeout={item.stopTimeout}
                         />
                     </View>
                 )}
