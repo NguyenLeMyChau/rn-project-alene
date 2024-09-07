@@ -48,7 +48,14 @@ export default function TestStep() {
                         )}
                         <Text style={styles.label}>{data[index]?.textStep}</Text>
                     </View>
-                    {index < steps.length - 1 && <View style={styles.line} />}
+                    {index < steps.length - 1 && (
+                        <View
+                            style={[
+                                styles.line,
+                                index < currentStep ? styles.lineSolid : styles.lineDashed
+                            ]}
+                        />
+                    )}
                 </React.Fragment>
             ))}
         </View>
@@ -74,9 +81,16 @@ const styles = StyleSheet.create({
     line: {
         width: 60,
         height: 1.5,
-        backgroundColor: 'white',
         marginHorizontal: -27,
         marginTop: -27,
+    },
+    lineSolid: {
+        backgroundColor: 'white',
+    },
+    lineDashed: {
+        borderWidth: 1.5,
+        borderColor: 'white',
+        borderStyle: 'dashed',
     },
     label: {
         color: 'white',
