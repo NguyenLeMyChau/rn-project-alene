@@ -61,7 +61,6 @@ const stepSlice = createSlice({
             for (const assessment of state.assessmenData) {
                 if (JSON.stringify(assessment.steps) === JSON.stringify(state.steps)) {
                     state.result = assessment.result;
-                    console.log('Matching result found:', state.result);
                     return;
                 }
             }

@@ -37,12 +37,11 @@ const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
 
             if (currentStep === steps.length - 1 && steps[currentStep] !== null) {
                 dispatch(compareStepsWithFirebase());
-                console.log(result);
             }
         };
 
         checkResult();
-    }, [steps, dispatch]);
+    }, [steps, result, dispatch]);
 
     // kiểm tra xem đã chọn đúng bước kiểm tra chưa
     useEffect(() => {
