@@ -2,20 +2,18 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FlatList, View, StyleSheet, Button, Dimensions } from 'react-native';
 import StepContext from '../../hook/StepProvider';
 import TestFrame from '../../components/frame/TestFrame';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 export default function Test() {
     const flatListRef = useRef<FlatList>(null); // ref cho FlatList
 
-    const context = useContext(StepContext);
-    if (!context) {
-        throw new Error('StepContext must be used within a StepProvider');
-    }
-    const { currentStep, data } = context;
+    const { currentStep, stepData } = useSelector((state: RootState) => state.steps);
 
     useEffect(() => {
-        if (flatListRef.current && currentStep >= 0 && currentStep < data.length) {
+        if (flatListRef.current && currentStep >= 0 && currentStep < stepData.length) {
             flatListRef.current.scrollToIndex({ index: currentStep, animated: true });
         }
 
@@ -31,7 +29,7 @@ export default function Test() {
         <View style={styles.container}>
             <FlatList
                 ref={flatListRef}
-                data={data}
+                data={stepData}
                 renderItem={({ item }) => (
                     <View style={{ width: screenWidth }}>
                         <TestFrame

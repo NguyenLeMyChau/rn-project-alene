@@ -9,6 +9,8 @@ import ButtonCheck from '../../components/button/ButtonCheck';
 import BackgroundColor from '../../components/backgroundColor/BackgroundColor';
 import StepContext from '../../hook/StepProvider';
 import { dataResult } from '../../data/dataResult';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
 export default function Submit() {
     const [name, setName] = useState('');
@@ -16,11 +18,8 @@ export default function Submit() {
     const [email, setEmail] = useState('');
     const [isChecked, setChecked] = useState(false);
 
-    const context = useContext(StepContext);
-    if (!context) {
-        throw new Error('StepContext must be used within a StepProvider');
-    }
-    const { result } = context;
+    const { result } = useSelector((state: RootState) => state.steps);
+
 
     const resultData = dataResult.find(item => item.result === result) || { title: '', textBody: '' };
 

@@ -11,6 +11,9 @@ import StepContext from '../../hook/StepProvider';
 import { AVPlaybackStatus, ResizeMode, Video } from 'expo-av';
 import Popup from '../../components/popup/Popup';
 import TestStep from '../../screens/test/steps/TestStep';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store/store';
+import { goNextStep, updateStep } from '../../store/reducers/stepSlice';
 
 type TestFrameProp = {
     title: string,
@@ -32,36 +35,36 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
         setIsLoading(false);
     };
 
-    const context = useContext(StepContext);
-    if (!context) {
-        throw new Error('StepContext must be used within a StepProvider');
-    }
-    const { steps, updateSteps, currentStep } = context;
+    const dispatch = useDispatch<AppDispatch>();
+    const { steps, currentStep } = useSelector((state: RootState) => state.steps);
 
-    // kiểm tra xem tất cả các bước đã được chọn chưa
+
+    // kiểm tra xem tất cả các bước đã được chọn chưa 
     const allStepsSelected = steps.every(step => step !== null);
 
-    useEffect(() => {
-        if (steps[currentStep] === true) {
-            setSelected(1);
-        } else if (steps[currentStep] === false) {
-            setSelected(0);
-        } else {
-            setSelected(null);
-        }
-    }, [steps, currentStep]);
 
     // dùng để chuyển sang bước tiếp theo
+    const handleNextStep = (value: boolean) => {
+        dispatch(updateStep({ index: currentStep, value }));
+
+        if (currentStep !== steps.length - 1) {
+            setTimeout(() => {
+                dispatch(goNextStep());
+            }, 1000);
+        }
+
+    }
+
     const handleYesClick = () => {
         setSelected(1);
         setSizeIcon({ yes: 45, no: 35 });
-        updateSteps(true);
+        handleNextStep(true);
     };
 
     const handleNoClick = () => {
         setSelected(0);
         setSizeIcon({ yes: 35, no: 45 });
-        updateSteps(false);
+        handleNextStep(false);
     };
 
 
@@ -99,7 +102,6 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
                         isLooping={true} // loop
                         resizeMode={ResizeMode.COVER}
                         style={styles.imgTest}
-                        useNativeControls={true} // show control
                         onLoad={handleLoad}
                     />
                 ) : (

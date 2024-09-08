@@ -8,20 +8,13 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../navigation/Navigation';
 import WelcomeFrame from '../../components/frame/WelcomeFrame';
 import TextNote from '../../components/text/TextNote';
-import { useContext } from 'react';
-import StepContext from '../../hook/StepProvider';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store/store';
+import { resetSteps } from '../../store/reducers/stepSlice';
 
 export default function Welcome() {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-    const context = useContext(StepContext);
-
-    if (!context) {
-        throw new Error("FrameTest must be used within a StepProvider");
-    }
-
-    const { resetSteps } = context;
-
-
+    const dispatch = useDispatch<AppDispatch>();
 
     return (
         <View style={styles.container}>
@@ -47,7 +40,7 @@ export default function Welcome() {
                 </View>
 
                 <View style={styles.buttonCheck}>
-                    <ButtonCheck text='KIỂM TRA NGAY' fontSize={20} borderColor='#E1D770' onPress={async () => { resetSteps(), navigation.navigate('Test') }} />
+                    <ButtonCheck text='KIỂM TRA NGAY' fontSize={20} borderColor='#E1D770' onPress={async () => { dispatch(resetSteps()), navigation.navigate('Test') }} />
                 </View>
 
 

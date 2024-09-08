@@ -1,18 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import StepContext from '../../../hook/StepProvider';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
 
 export default function TestStep() {
-    const context = useContext(StepContext);
-
-    if (!context) {
-        throw new Error('StepContext must be used within a StepProvider');
-    }
-
-    const { steps, currentStep, data } = context;
+    const { steps, currentStep, stepData } = useSelector((state: RootState) => state.steps);
 
     const allStepsCompleted = steps.every(step => step !== null);
 
@@ -46,7 +41,7 @@ export default function TestStep() {
                                 </View>
                             )
                         )}
-                        <Text style={styles.label}>{data[index]?.textStep}</Text>
+                        <Text style={styles.label}>{stepData[index]?.textStep}</Text>
                     </View>
                     {index < steps.length - 1 && (
                         <View
