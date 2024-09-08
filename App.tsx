@@ -5,12 +5,15 @@ import { Provider } from 'react-redux';
 import { store } from './src/store/store';
 import StepProvider from './src/hook/StepProvider';
 import { NavigationContainer } from '@react-navigation/native';
+import { UserProvider } from './src/hook/UserProvider';
 export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
         <StepProvider>
-          <Navigation />
+          <UserProvider>
+            <Navigation />
+          </UserProvider>
         </StepProvider>
       </NavigationContainer>
     </Provider>

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import Header from '../../components/header/Header';
 import Logo from '../../components/logo/Logo';
@@ -7,20 +7,15 @@ import InputFrame from '../../components/input/InputFrame';
 import Checkbox from 'expo-checkbox';
 import ButtonCheck from '../../components/button/ButtonCheck';
 import BackgroundColor from '../../components/backgroundColor/BackgroundColor';
-import StepContext from '../../hook/StepProvider';
 import { dataResult } from '../../data/dataResult';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
+import { useUser } from '../../hook/UserProvider';
 
 export default function Submit() {
-    const [name, setName] = useState('');
-    const [phone, setPhone] = useState('');
-    const [email, setEmail] = useState('');
-    const [isChecked, setChecked] = useState(false);
+    const { user, setUser, handleSubmit, full } = useUser();
 
     const { result } = useSelector((state: RootState) => state.steps);
-
-
     const resultData = dataResult.find(item => item.result === result) || { title: '', textBody: '' };
 
     return (
@@ -49,8 +44,8 @@ export default function Submit() {
                         <InputFrame
                             label='Họ tên'
                             placeholder='Nhập họ và tên'
-                            value={name}
-                            onChangeText={setName}
+                            value={user.fullName}
+                            onChangeText={(text) => setUser({ ...user, fullName: text })}
                             isObligatory={true}
                             result={result}
                         />
@@ -58,8 +53,8 @@ export default function Submit() {
                         <InputFrame
                             label='Số điện thoại'
                             placeholder='Nhập số điện thoại'
-                            value={phone}
-                            onChangeText={setPhone}
+                            value={user.phone}
+                            onChangeText={(text) => setUser({ ...user, phone: text })}
                             isObligatory={true}
                             result={result}
                         />
@@ -67,18 +62,18 @@ export default function Submit() {
                         <InputFrame
                             label='Email'
                             placeholder='Nhập email'
-                            value={email}
-                            onChangeText={setEmail}
+                            value={user.email}
+                            onChangeText={(text) => setUser({ ...user, email: text })}
                         />
 
                         <View style={styles.section}>
 
-                            <View style={[styles.checkboxContainer, isChecked ? styles.checked : styles.unchecked]}>
+                            <View style={[styles.checkboxContainer, user.checked ? styles.checked : styles.unchecked]}>
                                 <Checkbox
                                     style={styles.checkbox}
-                                    value={isChecked}
-                                    onValueChange={setChecked}
-                                    color={isChecked ? '#B70002' : 'white'}
+                                    value={user.checked}
+                                    onValueChange={(value) => setUser({ ...user, checked: value })}
+                                    color={user.checked ? '#B70002' : 'white'}
                                 />
                             </View>
 
@@ -92,9 +87,12 @@ export default function Submit() {
                     <View style={{ flex: 1, justifyContent: 'center', alignSelf: 'center' }}>
                         <ButtonCheck
                             text='HOÀN THÀNH'
-                            borderColor='#B8B8B8'
-                            backgroundColor='#B8B8B8'
-                            disabled={true}
+                            borderColor={full ? '#B70002' : '#B8B8B8'}
+                            backgroundColor={full ? '#B70002' : '#B8B8B8'}
+                            disabled={!full}
+                            onPress={() => {
+                                handleSubmit();
+                            }}
                         />
                     </View>
 

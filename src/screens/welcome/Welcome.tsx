@@ -11,6 +11,7 @@ import TextNote from '../../components/text/TextNote';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store/store';
 import { resetSteps } from '../../store/reducers/stepSlice';
+import { resetUser } from '../../store/reducers/userSlice';
 
 export default function Welcome() {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -40,7 +41,7 @@ export default function Welcome() {
                 </View>
 
                 <View style={styles.buttonCheck}>
-                    <ButtonCheck text='KIỂM TRA NGAY' fontSize={20} borderColor='#E1D770' onPress={async () => { dispatch(resetSteps()), navigation.navigate('Test') }} />
+                    <ButtonCheck text='KIỂM TRA NGAY' fontSize={20} borderColor='#E1D770' onPress={async () => { dispatch(resetSteps()), dispatch(resetUser()), navigation.navigate('Test') }} />
                 </View>
 
 
