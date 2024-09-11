@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-// import Navigation from './src/navigation/Navigation';
-// import { Provider } from 'react-redux';
-// import { store } from './src/store/store';
-// import StepProvider from './src/hook/StepProvider';
-// import { NavigationContainer } from '@react-navigation/native';
-// import { UserProvider } from './src/hook/UserProvider';
+import Navigation from './src/navigation/Navigation';
+import { Provider } from 'react-redux';
+import { store } from './src/store/store';
+import StepProvider from './src/hook/StepProvider';
+import { NavigationContainer } from '@react-navigation/native';
+import { UserProvider } from './src/hook/UserProvider';
 import LinkProduct from './src/screens/linkProduct/LinkProduct';
+import InformationProduct from './src/screens/informationProduct/InformationProduct';
 export default function App() {
   return (
     // <Provider store={store}>
@@ -18,7 +19,7 @@ export default function App() {
     //     </StepProvider>
     //   </NavigationContainer>
     // </Provider>
-    <LinkProduct />
+    <InformationProduct />
   );
 }
 

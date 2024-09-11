@@ -37,12 +37,13 @@ export default function Header({ currentPage }: HeaderProps) {
                 </TouchableOpacity>
             </View>
 
-            {/* {currentPage > 1 ? (
-                <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Welcome')}>
+            {currentPage > 1 ? (
+                <TouchableOpacity style={styles.iconButton}>
                     <Entypo name="home" size={26} color="white" />
                 </TouchableOpacity>
+                //  onPress={() => navigation.navigate('Welcome')}
             ) : <Logo />
-            } */}
+            }
 
 
 

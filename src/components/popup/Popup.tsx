@@ -37,9 +37,13 @@ export default function Popup({ visible = true, onClose, title, textbody, button
                     <Text style={styles.textbody}>{textbody}</Text>
 
                     <View style={styles.button}>
-                        <ButtonCheck text='HUỶ' backgroundColor='white' borderColor='#B70002' color='#B70002' onPress={onClose} />
+                        <ButtonCheck
+                            width={150} height={45}
+                            text='HUỶ' backgroundColor='white' borderColor='#B70002' color='#B70002' onPress={onClose} />
 
-                        <ButtonCheck text={buttonTextYes} onPress={onPressYes} />
+                        <ButtonCheck
+                            width={150} height={45}
+                            text={buttonTextYes} onPress={onPressYes} />
                     </View>
 
                 </View>

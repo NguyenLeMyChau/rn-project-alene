@@ -144,6 +144,8 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
 
             <ButtonCheck
                 text='XÁC NHẬN'
+                width={200}
+                height={50}
                 borderColor={allStepsSelected ? '#B70002' : '#B8B8B8'}
                 backgroundColor={allStepsSelected ? '#B70002' : '#B8B8B8'}
                 disabled={allStepsSelected ? false : true}

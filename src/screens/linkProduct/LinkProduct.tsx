@@ -106,10 +106,11 @@ const styles = StyleSheet.create({
     },
     text: {
         color: 'white',
-        fontSize: 12,
+        fontSize: 11,
         textAlign: 'center',
-        paddingLeft: 15,
+        paddingHorizontal: 20,
         alignSelf: 'flex-start',
+        fontWeight: '700'
     },
     footer: {
         width: '100%',

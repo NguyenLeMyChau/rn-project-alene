@@ -86,6 +86,7 @@ export default function Submit() {
 
                     <View style={{ flex: 1, justifyContent: 'center', alignSelf: 'center' }}>
                         <ButtonCheck
+                            width={200} height={50}
                             text='HOÀN THÀNH'
                             borderColor={full ? '#B70002' : '#B8B8B8'}
                             backgroundColor={full ? '#B70002' : '#B8B8B8'}
