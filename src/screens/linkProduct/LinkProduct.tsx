@@ -1,9 +1,12 @@
-import { ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { ImageBackground, StyleSheet, Text, View, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Header from '../../components/header/Header';
 import TextTitle from '../../components/text/TextTitle';
 import Logo from '../../components/logo/Logo';
 import Page3 from '../../../assets/page3.png';
+import LogoLazada from '../../../assets/logo-lazada-removebg.png';
+import ButtonCheck from '../../components/button/ButtonCheck';
+import TextNote from '../../components/text/TextNote';
 
 export default function LinkProduct() {
     return (
@@ -38,12 +41,40 @@ export default function LinkProduct() {
                     >
                         <View style={styles.lazada}>
                             <View style={styles.lazadaTop}>
-
+                                <Text style={{ fontSize: 10, color: '#73A442', fontWeight: 700 }}>MÃ GIẢM GIÁ</Text>
+                                <Text style={{ fontSize: 15, color: '#478449', fontWeight: 700 }}>ANLENANMUMW88YQI</Text>
                             </View>
                             <View style={styles.lazadaBottom}>
-
+                                <Text style={{ fontSize: 14, color: '#ECD24A', fontWeight: 700, marginRight: 15 }}>ÁP DỤNG TẠI</Text>
+                                <Image source={LogoLazada} style={styles.imgLazada} />
+                                <Text style={{ fontSize: 14, color: 'white', fontWeight: 700 }}>Lazada</Text>
                             </View>
                         </View>
+
+                        <ButtonCheck
+                            text='MUA NGAY'
+                            fontSize={16}
+                            width={200}
+                            height={45}
+                        />
+                        <ButtonCheck
+                            text='Tìm hiểu ngay'
+                            fontSize={16}
+                            backgroundColor='#FFFFFF'
+                            borderColor='#73A442'
+                            color='#73A442'
+                            width={200}
+                            height={43}
+                        />
+                        <View style={{paddingHorizontal: 10}}>
+                            <TextNote
+                                text='* Voucher chỉ áp dụng cho đơn hàng mua các sản phẩm Anlene Gold 3X, Anlene Gold 5X tại gian hàng Fonterra Official Retail Store trên Lazada'
+                            />
+                            <TextNote
+                                text='* Voucher chỉ áp dụng cho đơn hàng có giá trị từ 200.000đ'
+                            />
+                        </View>
+
                     </LinearGradient>
                 </View>
             </View>
@@ -78,10 +109,11 @@ const styles = StyleSheet.create({
         fontSize: 12,
         textAlign: 'center',
         paddingLeft: 15,
+        alignSelf: 'flex-start',
     },
     footer: {
         width: '100%',
-        height: '25%',
+        height: '30%',
     },
     containerFooter: {
         flex: 1,
@@ -92,13 +124,14 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     lazada: {
-        width: 200,
+        width: 280,
         height: 100,
         borderColor: 'white',
         borderWidth: 1,
         borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: -20,
     },
     lazadaTop: {
         width: '100%',
@@ -106,6 +139,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     lazadaBottom: {
         width: '100%',
@@ -113,5 +148,13 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    imgLazada: {
+        width: 40,
+        height: 40,
+        marginRight: 8
     },
 });
