@@ -6,16 +6,16 @@ interface TextTitleProps {
     text: string;
     fontSize?: number;
     height?: number;
+    marginTop?: number;
     result?: string | null;
-
 }
 
-export default function TextTitle({ text, fontSize = 22, height = 27, result }: TextTitleProps) {
+export default function TextTitle({ text, fontSize = 22, height = 27, marginTop, result }: TextTitleProps) {
     const textLength = text.length;
-    const locations = textLength >= 30
+    const locations = textLength >= 20
         ? [0, 0.35, 0.65, 1]
         : [0.2, 0.45, 0.5, 1];
-    const colors = textLength >= 30
+    const colors = textLength >= 20
         ? ['#BA872C', '#E8E276', '#E1D770', '#885021']
         : ['#7A5A1C', '#E8E276', '#E8E276', '#7A5A1C'];
 
@@ -36,7 +36,7 @@ export default function TextTitle({ text, fontSize = 22, height = 27, result }: 
             style={[styles.maskedView, { height }]}
             maskElement={
                 <View style={styles.centered}>
-                    <Text style={[styles.title, { fontSize }]}>
+                    <Text style={[styles.title, { fontSize, marginTop }]}>
                         {text}
                     </Text>
                 </View>
