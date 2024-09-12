@@ -1,4 +1,4 @@
-import { ImageBackground, StyleSheet, Text, View, Image } from 'react-native';
+import { ImageBackground, StyleSheet, Text, View, Image, Linking } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Header from '../../components/header/Header';
 import TextTitle from '../../components/text/TextTitle';
@@ -7,8 +7,17 @@ import Page3 from '../../../assets/page3.png';
 import LogoLazada from '../../../assets/logo-lazada-removebg.png';
 import ButtonCheck from '../../components/button/ButtonCheck';
 import TextNote from '../../components/text/TextNote';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 export default function LinkProduct() {
+    const navigation = useNavigation<NavigationProp<any>>();
+
+
+    const handleBuyNowPress = () => {
+        const url = 'https://s.lazada.vn/s.4AqK8';
+        Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
+    };
+
     return (
         <View style={styles.container}>
             {/* Hình nền nằm riêng trong một View khác */}
@@ -56,6 +65,7 @@ export default function LinkProduct() {
                             fontSize={16}
                             width={200}
                             height={45}
+                            onPress={handleBuyNowPress}
                         />
                         <ButtonCheck
                             text='Tìm hiểu ngay'
@@ -65,8 +75,9 @@ export default function LinkProduct() {
                             color='#73A442'
                             width={200}
                             height={43}
+                            onPress={() => navigation.navigate('InformationProduct')}
                         />
-                        <View style={{paddingHorizontal: 10}}>
+                        <View style={{ paddingHorizontal: 10 }}>
                             <TextNote
                                 text='* Voucher chỉ áp dụng cho đơn hàng mua các sản phẩm Anlene Gold 3X, Anlene Gold 5X tại gian hàng Fonterra Official Retail Store trên Lazada'
                             />

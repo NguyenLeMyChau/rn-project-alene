@@ -3,21 +3,42 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
 import Logo from '../logo/Logo';
-// import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
+import Popup from '../popup/Popup';
 
 type HeaderProps = {
     currentPage: number;
 };
 
 export default function Header({ currentPage }: HeaderProps) {
-    // const navigation = useNavigation<NavigationProp<any>>();
-    const totalPages = 6;
+    const navigation = useNavigation<NavigationProp<any>>();
+    const pages = ['Welcome', 'Test', 'Submit', 'Review', 'LinkProduct', 'InformationProduct'];
+    const [isOpenPopup, setOpenPopup] = useState(false);
+    const totalPages = pages.length;
+
+    const [page, setPage] = useState(currentPage - 1);
+
+    const handleClosePopup = () => {
+        setOpenPopup(false);
+    }
+
+    const handleLeftPress = () => {
+        if (page > 0) {
+            if (page !== 1) {
+                setPage(page - 1);
+                navigation.navigate(pages[page - 1]);
+            } else {
+                setOpenPopup(true);
+            }
+        }
+    };
 
     return (
         <View style={styles.container}>
 
-            {currentPage > 1 ? (
-                <TouchableOpacity style={styles.iconButton}>
+            {page > 0 ? (
+                <TouchableOpacity style={styles.iconButton} onPress={handleLeftPress}>
                     <AntDesign name="left" size={25} color="white" />
                 </TouchableOpacity>
             )
@@ -30,20 +51,31 @@ export default function Header({ currentPage }: HeaderProps) {
                     <AntDesign name="left" size={16} color="white" />
                 </TouchableOpacity>
 
-                <Text style={styles.title}>Trang {currentPage}/{totalPages} </Text>
+                <Text style={styles.title}>Trang {page + 1}/{totalPages} </Text>
 
                 <TouchableOpacity style={styles.iconButton} >
                     <AntDesign name="right" size={16} color="white" />
                 </TouchableOpacity>
             </View>
 
-            {currentPage > 1 ? (
-                <TouchableOpacity style={styles.iconButton}>
+            {page > 0 ? (
+                <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Welcome')}>
                     <Entypo name="home" size={26} color="white" />
                 </TouchableOpacity>
-                //  onPress={() => navigation.navigate('Welcome')}
             ) : <Logo />
             }
+
+            <Popup
+                visible={isOpenPopup}
+                title="THÔNG BÁO!"
+                textbody="Bạn có muốn huỷ bỏ kết quả kiểm tra sức khoẻ trước đó không?"
+                buttonTextYes="ĐỒNG Ý"
+                onClose={handleClosePopup}
+                onPressYes={() => {
+                    setPage(page - 1);
+                    navigation.navigate(pages[page - 1]);
+                }}
+            />
 
 
 

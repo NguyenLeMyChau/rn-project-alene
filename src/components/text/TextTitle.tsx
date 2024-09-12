@@ -1,6 +1,6 @@
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface TextTitleProps {
     text: string;
@@ -8,9 +8,10 @@ interface TextTitleProps {
     height?: number;
     marginTop?: number;
     result?: string | null;
+    onPress?: () => void;
 }
 
-export default function TextTitle({ text, fontSize = 22, height = 27, marginTop, result }: TextTitleProps) {
+export default function TextTitle({ text, fontSize = 22, height = 27, marginTop, result, onPress }: TextTitleProps) {
     const textLength = text.length;
     const locations = textLength >= 20
         ? [0, 0.35, 0.65, 1]
@@ -31,11 +32,11 @@ export default function TextTitle({ text, fontSize = 22, height = 27, marginTop,
     const resultColor = result === 'good' ? goodColor : result === 'normal' ? normalColor : badColor;
     const resultLocations = result === 'good' ? goodLocations : result === 'normal' ? normalLocations : badLocations;
 
-    return (
+    const content = (
         <MaskedView
             style={[styles.maskedView, { height }]}
             maskElement={
-                <View style={styles.centered}>
+                <View style={styles.centered} >
                     <Text style={[styles.title, { fontSize, marginTop }]}>
                         {text}
                     </Text>
@@ -51,7 +52,18 @@ export default function TextTitle({ text, fontSize = 22, height = 27, marginTop,
             />
         </MaskedView>
     );
+
+    if (onPress) {
+        return (
+            <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
+                {content}
+            </TouchableOpacity>
+        );
+    }
+
+    return content;
 }
+
 
 const styles = StyleSheet.create({
     maskedView: {

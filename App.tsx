@@ -6,20 +6,18 @@ import { store } from './src/store/store';
 import StepProvider from './src/hook/StepProvider';
 import { NavigationContainer } from '@react-navigation/native';
 import { UserProvider } from './src/hook/UserProvider';
-import LinkProduct from './src/screens/linkProduct/LinkProduct';
-import InformationProduct from './src/screens/informationProduct/InformationProduct';
+
 export default function App() {
   return (
-    // <Provider store={store}>
-    //   <NavigationContainer>
-    //     <StepProvider>
-    //       <UserProvider>
-    //         <Navigation />
-    //       </UserProvider>
-    //     </StepProvider>
-    //   </NavigationContainer>
-    // </Provider>
-    <InformationProduct />
+    <Provider store={store}>
+      <NavigationContainer>
+        <StepProvider>
+          <UserProvider>
+            <Navigation />
+          </UserProvider>
+        </StepProvider>
+      </NavigationContainer>
+    </Provider>
   );
 }
 

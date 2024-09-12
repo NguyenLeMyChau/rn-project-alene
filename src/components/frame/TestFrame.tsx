@@ -161,6 +161,7 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
                 buttonTextYes="TIẾP TỤC"
                 onClose={handleClosePopup}
                 onPressYes={() => navigation.navigate('Submit')}
+                confetti={true}
             />
         </LinearGradient>
     );

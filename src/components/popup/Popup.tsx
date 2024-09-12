@@ -10,18 +10,19 @@ type PopupProps = {
     textbody: string;
     buttonTextYes: string;
     onPressYes?: () => void;
+    confetti?: boolean;
 };
 
-export default function Popup({ visible = true, onClose, title, textbody, buttonTextYes, onPressYes }: PopupProps) {
+export default function Popup({ visible = true, onClose, title, textbody, buttonTextYes, onPressYes, confetti = false }: PopupProps) {
     const [showConfetti, setShowConfetti] = useState(false);
 
     // hiển thị hiệu ứng confetti khi popup xuất hiện
     useEffect(() => {
-        if (visible) {
+        if (visible && confetti) {
             setShowConfetti(true);
             setTimeout(() => setShowConfetti(false), 5000);
         }
-    }, [visible]);
+    }, [visible, confetti]);
 
     return (
         <Modal

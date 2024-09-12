@@ -6,6 +6,7 @@ import Submit from '../screens/submit/Submit';
 import Test from '../screens/test/Test';
 import Review from '../screens/review/Review';
 import LinkProduct from '../screens/linkProduct/LinkProduct';
+import InformationProduct from '../screens/informationProduct/InformationProduct';
 
 // Định nghĩa kiểu dữ liệu cho danh sách các route
 export type RootStackParamList = {
@@ -14,6 +15,7 @@ export type RootStackParamList = {
     Test: undefined;
     Review: undefined;
     LinkProduct: undefined;
+    InformationProduct: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -32,6 +34,7 @@ const Navigation = () => {
             <Stack.Screen name="Submit" component={Submit} />
             <Stack.Screen name="Review" component={Review} />
             <Stack.Screen name="LinkProduct" component={LinkProduct} />
+            <Stack.Screen name="InformationProduct" component={InformationProduct} />
         </Stack.Navigator>
     );
 };

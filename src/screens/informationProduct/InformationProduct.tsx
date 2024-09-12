@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     imageContainer: {
         width: '100%',
         alignItems: 'center',
+        marginVertical: -5,
     },
     imgMilk: {
         width: 350,
@@ -69,6 +70,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: 'white',
         textAlign: 'center',
+        lineHeight: 19,
     },
     imgFrame: {
         width: '80%',
