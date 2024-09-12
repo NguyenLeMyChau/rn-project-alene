@@ -3,9 +3,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import Navigation from './src/navigation/Navigation';
 import { Provider } from 'react-redux';
 import { store } from './src/store/store';
-import StepProvider from './src/hook/StepProvider';
 import { NavigationContainer } from '@react-navigation/native';
 import { UserProvider } from './src/hook/UserProvider';
+import { StepProvider } from './src/hook/StepProvider';
 
 export default function App() {
   return (

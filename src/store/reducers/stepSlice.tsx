@@ -56,6 +56,8 @@ const stepSlice = createSlice({
         resetSteps(state) {
             state.currentStep = 0;
             state.steps = Array(state.stepData.length).fill(null);
+            state.result = '';
+            console.log('Steps reset:', state.steps);
         },
         compareStepsWithFirebase(state) {
             for (const assessment of state.assessmenData) {

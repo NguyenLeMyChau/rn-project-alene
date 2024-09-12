@@ -7,13 +7,12 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import ButtonCheck from '../../components/button/ButtonCheck';
 import TextNote from '../../components/text/TextNote';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import StepContext from '../../hook/StepProvider';
-import { AVPlaybackStatus, ResizeMode, Video } from 'expo-av';
+import { ResizeMode, Video } from 'expo-av';
 import Popup from '../../components/popup/Popup';
 import TestStep from '../../screens/test/steps/TestStep';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../store/store';
-import { goNextStep, updateStep } from '../../store/reducers/stepSlice';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import { useSteps } from '../../hook/StepProvider';
 
 type TestFrameProp = {
     title: string,
@@ -25,48 +24,28 @@ type TestFrameProp = {
 }
 
 export default function TestFrame({ title, img, isVideo = true, textImg, textYes, textNo }: TestFrameProp) {
-    const [selected, setSelected] = useState<number | null>(null);
     const navigation = useNavigation<NavigationProp<any>>();
     const [isOpenPopup, setOpenPopup] = useState(false);
-    const [sizeIcon, setSizeIcon] = useState({ yes: 35, no: 35 });
     const [isLoading, setIsLoading] = useState(true);
 
     const handleLoad = () => {
         setIsLoading(false);
     };
 
-    const dispatch = useDispatch<AppDispatch>();
     const { steps, currentStep } = useSelector((state: RootState) => state.steps);
-
+    const { handleNextStep } = useSteps();
 
     // kiểm tra xem tất cả các bước đã được chọn chưa 
     const allStepsSelected = steps.every(step => step !== null);
 
 
-    // dùng để chuyển sang bước tiếp theo
-    const handleNextStep = (value: boolean) => {
-        dispatch(updateStep({ index: currentStep, value }));
-
-        if (currentStep !== steps.length - 1) {
-            setTimeout(() => {
-                dispatch(goNextStep());
-            }, 1000);
-        }
-
-    }
-
     const handleYesClick = () => {
-        setSelected(1);
-        setSizeIcon({ yes: 45, no: 35 });
         handleNextStep(true);
     };
 
     const handleNoClick = () => {
-        setSelected(0);
-        setSizeIcon({ yes: 35, no: 45 });
         handleNextStep(false);
     };
-
 
     const handleClosePopup = () => {
         setOpenPopup(false); // Hide modal
@@ -89,8 +68,8 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
             <TextTitle text={title} fontSize={18} height={35} />
 
             <View style={[styles.viewImage,
-            selected === 1 && styles.viewImageClickYes,
-            selected === 0 && styles.viewImageClickNo]}>
+            steps[currentStep] === true && styles.viewImageClickYes,
+            steps[currentStep] === false && styles.viewImageClickNo]}>
                 {isLoading && <ActivityIndicator size="large" color="#C4C4C4" style={styles.imgTest} />}
                 {isVideo ? (
                     <Video
@@ -108,10 +87,10 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
                     <Image source={{ uri: img }} style={styles.imgTest} onLoad={handleLoad} />
                 )}
 
-                {selected === 1 && (
+                {steps[currentStep] === true && (
                     <AntDesign name="checkcircle" size={50} color="#73A442" style={styles.iconImg} />
                 )}
-                {selected === 0 && (
+                {steps[currentStep] === false && (
                     <AntDesign name="closecircle" size={50} color="#C6463A" style={styles.iconImg} />
                 )}
             </View>
@@ -121,21 +100,21 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
             <View style={styles.containerButton}>
 
                 <TouchableOpacity
-                    style={[styles.button, selected === 1 && styles.buttonSelected]}
+                    style={[styles.button, steps[currentStep] === true && styles.buttonSelected]}
                     onPress={handleYesClick}
                 >
                     <View style={styles.buttonIcon}>
-                        <AntDesign name="smile-circle" size={sizeIcon.yes} color="#478449" />
+                        <AntDesign name="smile-circle" size={35} color="#478449" />
                     </View>
                     <Text style={styles.textButton}>{textYes}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={[styles.button, selected === 0 && styles.buttonSelected]}
+                    style={[styles.button, steps[currentStep] === false && styles.buttonSelected]}
                     onPress={handleNoClick}
                 >
                     <View style={styles.buttonIcon}>
-                        <AntDesign name="frown" size={sizeIcon.no} color="#E23F30" />
+                        <AntDesign name="frown" size={35} color="#E23F30" />
                     </View>
                     <Text style={styles.textButton}>{textNo}</Text>
                 </TouchableOpacity>

@@ -1,17 +1,16 @@
-import React, { ReactNode, useEffect } from 'react';
-import { Alert, BackHandler } from 'react-native';
+import React, { ReactNode, useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { compareStepsWithFirebase, fetchAssessmentData, fetchStepData, goBackStep, updateStep } from '../store/reducers/stepSlice';
+import { compareStepsWithFirebase, fetchAssessmentData, fetchStepData, goBackStep, goNextStep, updateStep } from '../store/reducers/stepSlice';
 import { RootState, AppDispatch } from '../store/store';
 
 interface StepProviderProps {
     children: ReactNode;
 }
 
-const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
-    const navigation = useNavigation<NavigationProp<any>>();
+export const StepContext = React.createContext<any>(null);
 
+export const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
     const dispatch = useDispatch<AppDispatch>();
     const { currentStep, steps, result } = useSelector((state: RootState) => state.steps);
 
@@ -27,14 +26,14 @@ const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
         };
 
         fetchData();
-    }, [dispatch]);
+    }, []);
 
-    // kiểm tra kết quả bài test khi đã chọn hết các bước kiểm tra
+    // // kiểm tra kết quả bài test khi đã chọn hết các bước kiểm tra
     useEffect(() => {
+        console.log("Checking result...");
+        console.log("Current step:", currentStep);
+        console.log("Steps:", steps);
         const checkResult = async () => {
-            console.log(steps);
-            console.log(currentStep);
-
             if (currentStep === steps.length - 1 && steps[currentStep] !== null) {
                 dispatch(compareStepsWithFirebase());
             }
@@ -43,43 +42,32 @@ const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
         checkResult();
     }, [steps, result, dispatch]);
 
-    // kiểm tra xem đã chọn đúng bước kiểm tra chưa
-    useEffect(() => {
-        const backAction = () => {
-            if (currentStep > 0) {
-                // Kiểm tra nếu hiện tại đang ở bước cuối cùng 
-                //và bước đó đã được hoàn thành (not null) thì sẽ reset lại bước đó
-                if (currentStep === steps.length - 1 && steps[currentStep] !== null) {
-                    dispatch(updateStep({ index: currentStep, value: null }));
-                } else {
-                    dispatch(updateStep({ index: currentStep - 1, value: null }));
-                    dispatch(goBackStep());
-                }
-                return true;
-            } else {
-                Alert.alert("Cảnh báo", "Bạn muốn huỷ kết quả bài test này?", [
-                    {
-                        text: "Cancel",
-                        onPress: () => null,
-                        style: "cancel"
-                    },
-                    { text: "YES", onPress: () => navigation.goBack() }
-                ]);
-                return true;
-            }
-        };
 
-        // thêm sự kiện khi ấn nút back
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
-        // xóa sự kiện khi component bị hủy
-        return () => backHandler.remove();
-    }, [currentStep, dispatch, steps]);
+    // dùng để chuyển sang bước tiếp theo
+    const handleNextStep = (value: boolean) => {
+        dispatch(updateStep({ index: currentStep, value }));
+
+        if (currentStep < steps.length - 1) {
+            setTimeout(() => {
+                dispatch(goNextStep());
+            }, 1000);
+        } else {
+            console.log("End of steps. Submitting or showing the result.");
+        }
+    };
+
 
     return (
-        <>
+        <StepContext.Provider value={{ handleNextStep }}>
             {children}
-        </>
+        </StepContext.Provider>
     );
 };
 
-export default StepProvider;
+export const useSteps = () => {
+    const context = useContext(StepContext);
+    if (!context) {
+        throw new Error('useSteps must be used within a UserProvider');
+    }
+    return context;
+};

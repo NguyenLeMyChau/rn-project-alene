@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, BackHandler, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
@@ -6,13 +6,20 @@ import Logo from '../logo/Logo';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import Popup from '../popup/Popup';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store/store';
+import { goBackStep, resetSteps, updateStep } from '../../store/reducers/stepSlice';
 
 type HeaderProps = {
     currentPage: number;
 };
 
 export default function Header({ currentPage }: HeaderProps) {
+    const dispatch = useDispatch<AppDispatch>();
+    const { currentStep, steps } = useSelector((state: RootState) => state.steps);
+
     const navigation = useNavigation<NavigationProp<any>>();
+
     const pages = ['Welcome', 'Test', 'Submit', 'Review', 'LinkProduct', 'InformationProduct'];
     const [isOpenPopup, setOpenPopup] = useState(false);
     const totalPages = pages.length;
@@ -25,14 +32,52 @@ export default function Header({ currentPage }: HeaderProps) {
 
     const handleLeftPress = () => {
         if (page > 0) {
-            if (page !== 1) {
-                setPage(page - 1);
-                navigation.navigate(pages[page - 1]);
+            if (page === 1 && currentStep > 0) {
+                if (currentStep === steps.length - 1 && steps[currentStep] !== null) {
+                    dispatch(updateStep({ index: currentStep, value: null }));
+                } else {
+                    dispatch(updateStep({ index: currentStep - 1, value: null }));
+                    dispatch(goBackStep());
+                }
             } else {
                 setOpenPopup(true);
             }
+        } else {
+            setPage(page - 1);
+            navigation.navigate(pages[page - 1]);
         }
     };
+
+    useEffect(() => {
+        const backAction = () => {
+            console.log('page', page);
+            console.log('currentStep', currentStep);
+            if (page === 1 && currentStep > 0) {
+                if (currentStep === steps.length - 1 && steps[currentStep] !== null) {
+                    dispatch(updateStep({ index: currentStep, value: null }));
+                } else {
+                    dispatch(updateStep({ index: currentStep - 1, value: null }));
+                    dispatch(goBackStep());
+                }
+                return true;
+            } else {
+                // Show confirmation popup if trying to exit Test page
+                Alert.alert("Warning", "Do you want to cancel the test?", [
+                    { text: "Cancel", style: "cancel" },
+                    {
+                        text: "Yes", onPress: () => {
+                            dispatch(resetSteps());
+                            navigation.navigate('Welcome');
+                        }
+                    }
+                ]);
+                return true;
+            }
+        };
+
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+        return () => backHandler.remove();
+    }, [currentStep, steps, dispatch]);
 
     return (
         <View style={styles.container}>
@@ -72,8 +117,8 @@ export default function Header({ currentPage }: HeaderProps) {
                 buttonTextYes="ĐỒNG Ý"
                 onClose={handleClosePopup}
                 onPressYes={() => {
-                    setPage(page - 1);
-                    navigation.navigate(pages[page - 1]);
+                    dispatch(resetSteps());
+                    navigation.navigate('Test');
                 }}
             />
 
