@@ -31,21 +31,23 @@ export default function Header({ currentPage }: HeaderProps) {
     }
 
     const handleLeftPress = () => {
-        if (page > 0) {
-            if (page === 1 && currentStep > 0) {
-                if (currentStep === steps.length - 1 && steps[currentStep] !== null) {
-                    dispatch(updateStep({ index: currentStep, value: null }));
-                } else {
-                    dispatch(updateStep({ index: currentStep - 1, value: null }));
-                    dispatch(goBackStep());
-                }
+        console.log('page', page);
+        setPage(currentPage - 1);
+        if (page === 1 && currentStep > 0) {
+            if (currentStep === steps.length - 1 && steps[currentStep] !== null) {
+                dispatch(updateStep({ index: currentStep, value: null }));
             } else {
-                setOpenPopup(true);
+                dispatch(updateStep({ index: currentStep - 1, value: null }));
+                dispatch(goBackStep());
             }
+        } else if (page === 2 || page === 3) {
+            setOpenPopup(true);
         } else {
             setPage(page - 1);
             navigation.navigate(pages[page - 1]);
         }
+
+
     };
 
     useEffect(() => {
@@ -67,7 +69,7 @@ export default function Header({ currentPage }: HeaderProps) {
                     {
                         text: "Yes", onPress: () => {
                             dispatch(resetSteps());
-                            navigation.navigate('Welcome');
+                            navigation.navigate('Test');
                         }
                     }
                 ]);

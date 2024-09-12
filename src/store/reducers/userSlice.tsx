@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../config/firebaseConfig";
 import { RootState } from "../store";
 
@@ -36,6 +36,15 @@ export const addUser = createAsyncThunk(
 
         // Trả về dữ liệu người dùng để sử dụng trong fulfilled case
         return user;
+    }
+);
+
+export const checkPhoneExist = createAsyncThunk(
+    'users/checkPhoneExist',
+    async (phone: string) => {
+        const q = query(collection(db, 'users'), where('phone', '==', phone));
+        const querySnapshot = await getDocs(q);
+        return !querySnapshot.empty;
     }
 );
 

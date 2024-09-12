@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../store/store';
-import { addUser } from '../store/reducers/userSlice';
+import { addUser, checkPhoneExist } from '../store/reducers/userSlice';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 interface UserContextProps {
@@ -55,6 +55,12 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const handleSubmit = async () => {
         try {
+            const phoneExists = await dispatch(checkPhoneExist(user.phone)).unwrap();
+            if (phoneExists) {
+                alert('Số điện thoại đã tồn tại!');
+                return;
+            }
+
             await dispatch(addUser(user)).unwrap();
             alert('Người dùng đã được thêm thành công!');
             navigation.navigate('Review');

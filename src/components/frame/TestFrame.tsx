@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ActivityIndicator, Alert, BackHandler, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, BackHandler, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Header from '../../components/header/Header';
 import TextTitle from '../../components/text/TextTitle';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -13,6 +13,7 @@ import TestStep from '../../screens/test/steps/TestStep';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { useSteps } from '../../hook/StepProvider';
+import { resetUser } from '../../store/reducers/userSlice';
 
 type TestFrameProp = {
     title: string,
@@ -48,101 +49,107 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
     };
 
     const handleClosePopup = () => {
-        setOpenPopup(false); // Hide modal
+        setOpenPopup(false);
     };
 
     return (
-        <LinearGradient
-            colors={['#0E470E', '#20680D', '#2E820D', '#13500E']}
-            locations={[0, 0.4, 0.724, 1]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.container}
-        >
-            <Header currentPage={2} />
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
 
-            <Text style={styles.title}>KIỂM TRA CƠ - XƯƠNG - KHỚP</Text>
+            <LinearGradient
+                colors={['#0E470E', '#20680D', '#2E820D', '#13500E']}
+                locations={[0, 0.4, 0.724, 1]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.container}
+            >
+                <Header currentPage={2} />
 
-            <TestStep />
+                <Text style={styles.title}>KIỂM TRA CƠ - XƯƠNG - KHỚP</Text>
 
-            <TextTitle text={title} fontSize={18} height={35} />
+                <TestStep />
 
-            <View style={[styles.viewImage,
-            steps[currentStep] === true && styles.viewImageClickYes,
-            steps[currentStep] === false && styles.viewImageClickNo]}>
-                {isLoading && <ActivityIndicator size="large" color="#C4C4C4" style={styles.imgTest} />}
-                {isVideo ? (
-                    <Video
-                        source={{ uri: img }}
-                        rate={1.0}
-                        volume={1.0}
-                        isMuted={false}
-                        shouldPlay={true} // auto play
-                        isLooping={true} // loop
-                        resizeMode={ResizeMode.COVER}
-                        style={styles.imgTest}
-                        onLoad={handleLoad}
-                    />
-                ) : (
-                    <Image source={{ uri: img }} style={styles.imgTest} onLoad={handleLoad} />
-                )}
+                <TextTitle text={title} fontSize={18} height={35} />
 
-                {steps[currentStep] === true && (
-                    <AntDesign name="checkcircle" size={50} color="#73A442" style={styles.iconImg} />
-                )}
-                {steps[currentStep] === false && (
-                    <AntDesign name="closecircle" size={50} color="#C6463A" style={styles.iconImg} />
-                )}
-            </View>
+                <View style={[styles.viewImage,
+                steps[currentStep] === true && styles.viewImageClickYes,
+                steps[currentStep] === false && styles.viewImageClickNo]}>
+                    {isLoading && <ActivityIndicator size="large" color="#C4C4C4" style={styles.imgTest} />}
+                    {isVideo ? (
+                        <Video
+                            source={{ uri: img }}
+                            rate={1.0}
+                            volume={1.0}
+                            isMuted={false}
+                            shouldPlay={true} // auto play
+                            isLooping={true} // loop
+                            resizeMode={ResizeMode.COVER}
+                            style={styles.imgTest}
+                            onLoad={handleLoad}
+                        />
+                    ) : (
+                        <Image source={{ uri: img }} style={styles.imgTest} onLoad={handleLoad} />
+                    )}
 
-            <Text style={styles.text}>{textImg}</Text>
+                    {steps[currentStep] === true && (
+                        <AntDesign name="checkcircle" size={50} color="#73A442" style={styles.iconImg} />
+                    )}
+                    {steps[currentStep] === false && (
+                        <AntDesign name="closecircle" size={50} color="#C6463A" style={styles.iconImg} />
+                    )}
+                </View>
 
-            <View style={styles.containerButton}>
+                <Text style={styles.text}>{textImg}</Text>
 
-                <TouchableOpacity
-                    style={[styles.button, steps[currentStep] === true && styles.buttonSelected]}
-                    onPress={handleYesClick}
-                >
-                    <View style={styles.buttonIcon}>
-                        <AntDesign name="smile-circle" size={35} color="#478449" />
-                    </View>
-                    <Text style={styles.textButton}>{textYes}</Text>
-                </TouchableOpacity>
+                <View style={styles.containerButton}>
 
-                <TouchableOpacity
-                    style={[styles.button, steps[currentStep] === false && styles.buttonSelected]}
-                    onPress={handleNoClick}
-                >
-                    <View style={styles.buttonIcon}>
-                        <AntDesign name="frown" size={35} color="#E23F30" />
-                    </View>
-                    <Text style={styles.textButton}>{textNo}</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.button, steps[currentStep] === true && styles.buttonSelected]}
+                        onPress={handleYesClick}
+                    >
+                        <View style={styles.buttonIcon}>
+                            <AntDesign name="smile-circle" size={35} color="#478449" />
+                        </View>
+                        <Text style={styles.textButton}>{textYes}</Text>
+                    </TouchableOpacity>
 
-            </View>
+                    <TouchableOpacity
+                        style={[styles.button, steps[currentStep] === false && styles.buttonSelected]}
+                        onPress={handleNoClick}
+                    >
+                        <View style={styles.buttonIcon}>
+                            <AntDesign name="frown" size={35} color="#E23F30" />
+                        </View>
+                        <Text style={styles.textButton}>{textNo}</Text>
+                    </TouchableOpacity>
 
-            <ButtonCheck
-                text='XÁC NHẬN'
-                width={200}
-                height={50}
-                borderColor={allStepsSelected ? '#B70002' : '#B8B8B8'}
-                backgroundColor={allStepsSelected ? '#B70002' : '#B8B8B8'}
-                disabled={allStepsSelected ? false : true}
-                onPress={() => setOpenPopup(true)}
-            />
+                </View>
 
-            <TextNote text={'*Lưu ý: Hãy dừng bài tập ngay nếu cảm thấy không thoải mái.\n Đảm bảo vị trí tập an toàn để không té ngã.'} />
+                <ButtonCheck
+                    text='XÁC NHẬN'
+                    width={200}
+                    height={50}
+                    borderColor={allStepsSelected ? '#B70002' : '#B8B8B8'}
+                    backgroundColor={allStepsSelected ? '#B70002' : '#B8B8B8'}
+                    disabled={allStepsSelected ? false : true}
+                    onPress={() => setOpenPopup(true)}
+                />
 
-            <Popup
-                visible={isOpenPopup}
-                title="CẢM ƠN"
-                textbody="Bạn đã tham gia bài kiểm tra sức khoẻ. Hãy tiếp tục để có thể nhận kết quả kiểm tra sức khoẻ của bạn."
-                buttonTextYes="TIẾP TỤC"
-                onClose={handleClosePopup}
-                onPressYes={() => navigation.navigate('Submit')}
-                confetti={true}
-            />
-        </LinearGradient>
+                <TextNote text={'*Lưu ý: Hãy dừng bài tập ngay nếu cảm thấy không thoải mái.\n Đảm bảo vị trí tập an toàn để không té ngã.'} />
+
+                <Popup
+                    visible={isOpenPopup}
+                    title="CẢM ƠN"
+                    textbody="Bạn đã tham gia bài kiểm tra sức khoẻ. Hãy tiếp tục để có thể nhận kết quả kiểm tra sức khoẻ của bạn."
+                    buttonTextYes="TIẾP TỤC"
+                    onClose={handleClosePopup}
+                    onPressYes={() => {
+                        resetUser();
+                        navigation.navigate('Submit');
+                    }}
+                    confetti={true}
+                />
+            </LinearGradient>
+        </ScrollView>
     );
 }
 
@@ -150,6 +157,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center'
+    },
+
+    scrollViewContent: {
+        alignItems: 'center',
+        paddingBottom: 20,
     },
 
     title: {
@@ -206,7 +218,6 @@ const styles = StyleSheet.create({
 
     containerButton: {
         flexDirection: 'row',
-        justifyContent: 'center',
         width: '100%',
         marginVertical: 5,
         marginBottom: 10
