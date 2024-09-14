@@ -3,8 +3,6 @@ import { StyleSheet, Text, View, KeyboardAvoidingView, ScrollView, Platform, Ima
 import Header from '../../components/header/Header';
 import Logo from '../../components/logo/Logo';
 import TextTitle from '../../components/text/TextTitle';
-import InputFrame from '../../components/input/InputFrame';
-import Checkbox from 'expo-checkbox';
 import ButtonCheck from '../../components/button/ButtonCheck';
 import BackgroundColor from '../../components/backgroundColor/BackgroundColor';
 import { dataResult } from '../../data/dataResult';
@@ -96,16 +94,11 @@ export default function Review() {
                             />
                         </Animatable.View>
                     ) : (
-                        <TextTitle
-                            text='Xem thêm'
-                            fontSize={12}
-                            height={30}
-                            result={result}
-                            onPress={() => {
-                                console.log('Button pressed');
-                                setSeeMore(true);
-                            }}
-                        />
+                        <TouchableOpacity onPress={() => setSeeMore(true)}>
+                            <Text style={[styles.seeMore, { color: result === 'normal' ? '#187B33' : '#ECD24A' }]}>
+                                Xem thêm
+                            </Text>
+                        </TouchableOpacity>
                     )}
                     <ButtonCheck
                         width={200}
@@ -149,6 +142,12 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         resizeMode: 'contain',
         marginRight: 20,
-    }
+    },
+    seeMore: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginVertical: 10,
+    },
 
 });

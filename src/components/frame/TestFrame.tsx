@@ -28,6 +28,7 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
     const navigation = useNavigation<NavigationProp<any>>();
     const [isOpenPopup, setOpenPopup] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
     const handleLoad = () => {
         setIsLoading(false);
@@ -42,10 +43,12 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
 
     const handleYesClick = () => {
         handleNextStep(true);
+        setIsButtonDisabled(true);
     };
 
     const handleNoClick = () => {
         handleNextStep(false);
+        setIsButtonDisabled(true);
     };
 
     const handleClosePopup = () => {
@@ -105,6 +108,7 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
                     <TouchableOpacity
                         style={[styles.button, steps[currentStep] === true && styles.buttonSelected]}
                         onPress={handleYesClick}
+                        disabled={isButtonDisabled}
                     >
                         <View style={styles.buttonIcon}>
                             <AntDesign name="smile-circle" size={35} color="#478449" />
@@ -115,6 +119,7 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
                     <TouchableOpacity
                         style={[styles.button, steps[currentStep] === false && styles.buttonSelected]}
                         onPress={handleNoClick}
+                        disabled={isButtonDisabled}
                     >
                         <View style={styles.buttonIcon}>
                             <AntDesign name="frown" size={35} color="#E23F30" />
@@ -160,8 +165,8 @@ const styles = StyleSheet.create({
     },
 
     scrollViewContent: {
+        flexGrow: 1,
         alignItems: 'center',
-        paddingBottom: 20,
     },
 
     title: {

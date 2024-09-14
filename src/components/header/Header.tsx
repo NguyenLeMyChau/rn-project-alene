@@ -62,17 +62,12 @@ export default function Header({ currentPage }: HeaderProps) {
                     dispatch(goBackStep());
                 }
                 return true;
-            } else {
-                // Show confirmation popup if trying to exit Test page
-                Alert.alert("Warning", "Do you want to cancel the test?", [
-                    { text: "Cancel", style: "cancel" },
-                    {
-                        text: "Yes", onPress: () => {
-                            dispatch(resetSteps());
-                            navigation.navigate('Test');
-                        }
-                    }
-                ]);
+            } else if (page === 2 || page === 3) {
+                setOpenPopup(true);
+            }
+            else {
+                setPage(page - 1);
+                navigation.navigate(pages[page - 1]);
                 return true;
             }
         };
@@ -120,7 +115,7 @@ export default function Header({ currentPage }: HeaderProps) {
                 onClose={handleClosePopup}
                 onPressYes={() => {
                     dispatch(resetSteps());
-                    navigation.navigate('Test');
+                    navigation.navigate('Welcome');
                 }}
             />
 
