@@ -12,10 +12,12 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store/store';
 import { resetSteps } from '../../store/reducers/stepSlice';
 import { resetUser } from '../../store/reducers/userSlice';
+import { useUser } from '../../hook/UserProvider';
 
 export default function Welcome() {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const dispatch = useDispatch<AppDispatch>();
+    const { resetUserProvider } = useUser();
 
     return (
         <View style={styles.container}>
@@ -31,9 +33,9 @@ export default function Welcome() {
                     >
                         <Header currentPage={1} />
 
-                        <TextTitle text={"TẾT BẬN RỘN \nCƠ-XƯƠNG-KHỚP CÓ KHOẺ \nĐỂ CHU TOÀN?"} height={100} />
+                        <TextTitle text={"TẾT BẬN RỘN \nCƠ-XƯƠNG-KHỚP CÓ KHOẺ \nĐỂ CHU TOÀN?"} />
 
-                        <View style={{ paddingHorizontal: 20 }}>
+                        <View style={{ paddingHorizontal: 20, marginBottom: 10 }}>
                             <Text style={styles.text}>Trăm công nghìn việc dịp cận Tết mà cơ thể nhức mỏi, làm sao chu toàn?</Text>
                             <Text style={styles.text}>Ngay lúc này, hãy <Text style={{ color: '#E1D770' }}>Kiểm tra Sức khoẻ Cơ-Xương-Khớp</Text> cùng Anlene để Tết này cả nhà vui khoẻ đón Tết, {'\n'} trọn vẹn niềm vui.</Text>
                         </View>
@@ -41,7 +43,7 @@ export default function Welcome() {
                 </View>
 
                 <View style={styles.buttonCheck}>
-                    <ButtonCheck text='KIỂM TRA NGAY' width={300} height={55} fontSize={20} borderColor='#E1D770' onPress={async () => { dispatch(resetSteps()), dispatch(resetUser()), navigation.navigate('Test') }} />
+                    <ButtonCheck text='KIỂM TRA NGAY' width={300} height={55} fontSize={20} borderColor='#E1D770' onPress={async () => { dispatch(resetSteps()), dispatch(resetUser()), resetUserProvider(), navigation.navigate('Test') }} />
                 </View>
 
 

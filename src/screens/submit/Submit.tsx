@@ -7,7 +7,6 @@ import InputFrame from '../../components/input/InputFrame';
 import Checkbox from 'expo-checkbox';
 import ButtonCheck from '../../components/button/ButtonCheck';
 import BackgroundColor from '../../components/backgroundColor/BackgroundColor';
-import { dataResult } from '../../data/dataResult';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { useUser } from '../../hook/UserProvider';
@@ -15,8 +14,7 @@ import { useUser } from '../../hook/UserProvider';
 export default function Submit() {
     const { user, setUser, handleSubmit, full } = useUser();
 
-    const { result } = useSelector((state: RootState) => state.steps);
-    const resultData = dataResult.find(item => item.result === result) || { title: '', textBody: '' };
+    const { result, dataResult } = useSelector((state: RootState) => state.steps);
 
     return (
         <BackgroundColor stateStrength={result}>
@@ -32,9 +30,9 @@ export default function Submit() {
 
                     <View style={{ paddingHorizontal: 30 }}>
                         <TextTitle text='HOÀN THÀNH BÀI KIỂM TRA' fontSize={13} result={result} />
-                        <TextTitle text={resultData.title} fontSize={24} height={34} result={result} />
+                        <TextTitle text={dataResult.title} fontSize={24} result={result} />
 
-                        <Text style={styles.text}>{resultData.textBody}</Text>
+                        <Text style={styles.text}>{dataResult.textBody}</Text>
 
                         <Text style={styles.textInput}>Điền thông tin bên dưới để xem đầy đủ
                             kết quả và nhận ngay Voucher ưu đãi lên đến 100.000đ từ Anlene.</Text>

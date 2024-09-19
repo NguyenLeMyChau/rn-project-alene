@@ -21,9 +21,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 export default function Review() {
     const navigation = useNavigation<NavigationProp<any>>();
     const [seeMore, setSeeMore] = useState(false);
-    const result = useSelector((state: RootState) => state.steps.result);
-    const resultData = dataResult.find(item => item.result === result) || { titleReview: '', textReview: '', textSequel: '', anleteText: '' };
-    const titleReview = resultData.titleReview || '';
+    const { result, dataResult } = useSelector((state: RootState) => state.steps);
 
     return (
         <BackgroundColor stateStrength={result}>
@@ -32,9 +30,9 @@ export default function Review() {
                 <Logo width={120} height={100} />
 
                 <View style={{ paddingHorizontal: 10 }}>
-                    <TextTitle text={titleReview} fontSize={24} height={35} result={result} />
+                    <TextTitle text={dataResult.titleReview} fontSize={24} result={result} />
 
-                    <Text style={styles.text}>{resultData.textReview}</Text>
+                    <Text style={styles.text}>{dataResult.textReview}</Text>
 
                     <View style={styles.threeimg}>
                         <ReviewFrame
@@ -56,7 +54,7 @@ export default function Review() {
                         />
                     </View>
 
-                    <Text style={styles.text}>{resultData.textSequel}</Text>
+                    <Text style={styles.text}>{dataResult.textSequel}</Text>
 
                     {result === 'normal'
                         ? <Image source={Milk} style={styles.milk} />
@@ -78,14 +76,14 @@ export default function Review() {
 
                     <TextTitle
                         text='LỰA CHỌN GIÚP CƠ-XƯƠNG-KHỚP CHẮC KHOẺ'
-                        result={result}
+                        result={result === 'normal' ? 'normal' : 'good'}
                         fontSize={12}
                     />
 
                 </View>
 
                 <View style={{ paddingHorizontal: 20, alignItems: 'center' }}>
-                    <Text style={styles.text}>{resultData.anleteText}</Text>
+                    <Text style={styles.text}>{dataResult.anleteText}</Text>
                     {seeMore ? (
                         <Animatable.View animation="slideInUp" duration={500}>
                             <TextNote

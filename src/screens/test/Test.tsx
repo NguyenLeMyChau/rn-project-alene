@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FlatList, View, StyleSheet, Button, Dimensions } from 'react-native';
-import StepContext from '../../hook/StepProvider';
 import TestFrame from '../../components/frame/TestFrame';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';

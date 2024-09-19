@@ -20,6 +20,7 @@ interface UserContextProps {
     }>>;
     handleSubmit: () => Promise<void>;
     full: boolean;
+    resetUserProvider: () => void;
 }
 
 const UserContext = createContext<UserContextProps | undefined>(undefined);
@@ -44,7 +45,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
     }, [user.fullName, user.phone]);
 
-    const resetUser = () => {
+    const resetUserProvider = () => {
         setUser({
             fullName: '',
             phone: '',
@@ -64,7 +65,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             await dispatch(addUser(user)).unwrap();
             alert('Người dùng đã được thêm thành công!');
             navigation.navigate('Review');
-            resetUser();
+            resetUserProvider();
         } catch (error) {
             console.error('Lỗi khi thêm người dùng:', error);
             alert('Đã xảy ra lỗi, vui lòng thử lại.');
@@ -74,7 +75,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 
     return (
-        <UserContext.Provider value={{ user, setUser, handleSubmit, full }}>
+        <UserContext.Provider value={{ user, setUser, handleSubmit, full, resetUserProvider }}>
             {children}
         </UserContext.Provider>
     );

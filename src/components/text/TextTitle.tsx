@@ -5,13 +5,12 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 interface TextTitleProps {
     text: string;
     fontSize?: number;
-    height?: number;
     marginTop?: number;
     result?: string | null;
     onPress?: () => void;
 }
 
-export default function TextTitle({ text, fontSize = 22, height = 27, marginTop, result, onPress }: TextTitleProps) {
+export default function TextTitle({ text, fontSize = 22, marginTop, result, onPress }: TextTitleProps) {
     const textLength = text.length;
     const locations = textLength >= 20
         ? [0, 0.35, 0.65, 1]
@@ -32,9 +31,11 @@ export default function TextTitle({ text, fontSize = 22, height = 27, marginTop,
     const resultColor = result === 'good' ? goodColor : result === 'normal' ? normalColor : badColor;
     const resultLocations = result === 'good' ? goodLocations : result === 'normal' ? normalLocations : badLocations;
 
+    const height = fontSize <= 13 ? fontSize * 2.5 : fontSize * 1.5;
+
     const content = (
         <MaskedView
-            style={[styles.maskedView, { height }]}
+            style={{ ...styles.maskedView, height: height }}
             maskElement={
                 <View style={styles.centered} >
                     <Text style={[styles.title, { fontSize, marginTop }]}>
@@ -67,6 +68,7 @@ export default function TextTitle({ text, fontSize = 22, height = 27, marginTop,
 
 const styles = StyleSheet.create({
     maskedView: {
+        flex: 1,
         flexDirection: 'row',
         marginVertical: 5,
     },

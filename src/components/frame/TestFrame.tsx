@@ -28,7 +28,6 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
     const navigation = useNavigation<NavigationProp<any>>();
     const [isOpenPopup, setOpenPopup] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
     const handleLoad = () => {
         setIsLoading(false);
@@ -36,6 +35,7 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
 
     const { steps, currentStep } = useSelector((state: RootState) => state.steps);
     const { handleNextStep } = useSteps();
+    const isDisabled = steps[currentStep] !== null; // or any condition based on your logic
 
     // kiểm tra xem tất cả các bước đã được chọn chưa 
     const allStepsSelected = steps.every(step => step !== null);
@@ -43,12 +43,10 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
 
     const handleYesClick = () => {
         handleNextStep(true);
-        setIsButtonDisabled(true);
     };
 
     const handleNoClick = () => {
         handleNextStep(false);
-        setIsButtonDisabled(true);
     };
 
     const handleClosePopup = () => {
@@ -71,7 +69,7 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
 
                 <TestStep />
 
-                <TextTitle text={title} fontSize={18} height={35} />
+                <TextTitle text={title} fontSize={18} />
 
                 <View style={[styles.viewImage,
                 steps[currentStep] === true && styles.viewImageClickYes,
@@ -108,7 +106,7 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
                     <TouchableOpacity
                         style={[styles.button, steps[currentStep] === true && styles.buttonSelected]}
                         onPress={handleYesClick}
-                        disabled={isButtonDisabled}
+                        disabled={isDisabled}
                     >
                         <View style={styles.buttonIcon}>
                             <AntDesign name="smile-circle" size={35} color="#478449" />
@@ -119,7 +117,7 @@ export default function TestFrame({ title, img, isVideo = true, textImg, textYes
                     <TouchableOpacity
                         style={[styles.button, steps[currentStep] === false && styles.buttonSelected]}
                         onPress={handleNoClick}
-                        disabled={isButtonDisabled}
+                        disabled={isDisabled}
                     >
                         <View style={styles.buttonIcon}>
                             <AntDesign name="frown" size={35} color="#E23F30" />

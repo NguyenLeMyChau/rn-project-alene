@@ -16,8 +16,8 @@ export default function InformationProduct() {
 
                 <Header currentPage={6} />
                 <Logo width={120} height={100} />
-                <TextTitle text={"THÔNG TIN SẢN PHẨM"} fontSize={20} height={30} result={'good'} />
-                <TextTitle text={"SỮA ANLENE 3 KHỎE"} fontSize={16} height={40} marginTop={-5} result={'good'} />
+                <TextTitle text={"THÔNG TIN SẢN PHẨM"} fontSize={20} result={'good'} />
+                <TextTitle text={"SỮA ANLENE 3 KHỎE"} fontSize={16} marginTop={-5} result={'good'} />
 
                 <View style={styles.imageContainer}>
                     <Image source={Milk} style={styles.imgMilk} />
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     },
     scrollViewContent: {
         alignItems: 'center',
-        paddingBottom: 20, // Đảm bảo có khoảng trống ở cuối khi cuộn
+        paddingBottom: 20,
     },
     imageContainer: {
         width: '100%',

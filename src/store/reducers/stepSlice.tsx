@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, current, PayloadAction } from '@reduxjs/toolkit';
-import { collection, getDocs, onSnapshot, query } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 import { db } from '../../config/firebaseConfig';
 
 interface StepState {
@@ -8,6 +8,8 @@ interface StepState {
     stepData: any[];
     assessmenData: any[];
     result: string;
+    dataResultArr: any[];
+    dataResult: any | null;
 }
 
 const initialState: StepState = {
@@ -15,7 +17,9 @@ const initialState: StepState = {
     currentStep: 0,
     stepData: [],
     assessmenData: [],
-    result: ''
+    result: '',
+    dataResultArr: [],
+    dataResult: null
 };
 
 export const fetchAssessmentData = createAsyncThunk(
@@ -35,6 +39,16 @@ export const fetchStepData = createAsyncThunk(
         return stepData;
     }
 );
+
+export const fetchDataByResult = createAsyncThunk(
+    'steps/fetchDataByResult',
+    async () => {
+        const querySnapshot = await getDocs(collection(db, 'data-result'));
+        const dataResult = querySnapshot.docs.map(doc => doc.data());
+        return dataResult;
+    }
+);
+
 
 const stepSlice = createSlice({
     name: 'steps',
@@ -66,6 +80,16 @@ const stepSlice = createSlice({
                 }
             }
             state.result = "No matching result";
+        },
+        compareResultWithFirebase(state) {
+            for (const dataResult of state.dataResultArr) {
+                if (JSON.stringify(dataResult.result) === JSON.stringify(state.result)) {
+                    state.dataResult = dataResult;
+                    console.log('dataResult: ', state.dataResult);
+                    return;
+                }
+            }
+            state.dataResult = null;
         }
     },
     extraReducers: (builder) => {
@@ -77,9 +101,13 @@ const stepSlice = createSlice({
                 state.stepData = action.payload;
                 state.steps = Array(action.payload.length).fill(null);
                 console.log('steps', state.steps);
+            })
+            .addCase(fetchDataByResult.fulfilled, (state, action: PayloadAction<any[]>) => {
+                // Lưu object được trả về từ Firebase vào state
+                state.dataResultArr = action.payload;
             });
     }
 });
 
-export const { goBackStep, goNextStep, resetSteps, updateStep, compareStepsWithFirebase } = stepSlice.actions;
+export const { goBackStep, goNextStep, resetSteps, updateStep, compareStepsWithFirebase, compareResultWithFirebase } = stepSlice.actions;
 export default stepSlice.reducer;

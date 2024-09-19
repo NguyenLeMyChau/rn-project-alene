@@ -1,7 +1,6 @@
 import React, { ReactNode, useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { compareStepsWithFirebase, fetchAssessmentData, fetchStepData, goBackStep, goNextStep, updateStep } from '../store/reducers/stepSlice';
+import { compareResultWithFirebase, compareStepsWithFirebase, fetchAssessmentData, fetchDataByResult, fetchStepData, goBackStep, goNextStep, updateStep } from '../store/reducers/stepSlice';
 import { RootState, AppDispatch } from '../store/store';
 
 interface StepProviderProps {
@@ -18,8 +17,11 @@ export const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                await dispatch(fetchStepData()).unwrap();
-                await dispatch(fetchAssessmentData()).unwrap();
+                await Promise.all([
+                    dispatch(fetchStepData()).unwrap(),
+                    dispatch(fetchAssessmentData()).unwrap(),
+                    dispatch(fetchDataByResult()).unwrap()
+                ]);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -30,7 +32,7 @@ export const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
 
     // // kiểm tra kết quả bài test khi đã chọn hết các bước kiểm tra
     useEffect(() => {
-        console.log("Checking result...");
+        console.log("Checking result...", result);
         console.log("Current step:", currentStep);
         console.log("Steps:", steps);
         const checkResult = async () => {
@@ -40,7 +42,21 @@ export const StepProvider: React.FC<StepProviderProps> = ({ children }) => {
         };
 
         checkResult();
-    }, [steps, result, dispatch]);
+    }, [steps, dispatch]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (result) {
+                try {
+                    dispatch(compareResultWithFirebase());
+                } catch (error) {
+                    console.error('Error fetching data by result:', error);
+                }
+            }
+        };
+
+        fetchData();
+    }, [result, dispatch]);
 
 
     // dùng để chuyển sang bước tiếp theo

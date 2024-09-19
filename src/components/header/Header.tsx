@@ -3,8 +3,8 @@ import { Alert, BackHandler, StyleSheet, Text, TouchableOpacity, View } from 're
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
 import Logo from '../logo/Logo';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
+import { NavigationProp, useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useCallback, useEffect, useState } from 'react';
 import Popup from '../popup/Popup';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store/store';
@@ -47,7 +47,6 @@ export default function Header({ currentPage }: HeaderProps) {
             navigation.navigate(pages[page - 1]);
         }
 
-
     };
 
     useEffect(() => {
@@ -75,6 +74,7 @@ export default function Header({ currentPage }: HeaderProps) {
         const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
         return () => backHandler.remove();
     }, [currentStep, steps, dispatch]);
+
 
     return (
         <View style={styles.container}>
@@ -114,8 +114,8 @@ export default function Header({ currentPage }: HeaderProps) {
                 buttonTextYes="ĐỒNG Ý"
                 onClose={handleClosePopup}
                 onPressYes={() => {
-                    dispatch(resetSteps());
                     navigation.navigate('Welcome');
+                    dispatch(resetSteps());
                 }}
             />
 
